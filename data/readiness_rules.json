@@ -1,0 +1,179 @@
+{
+  "rules_version": "1.0",
+  "rules_type": "demo",
+  "title_ar": "الجاهزية النهائية للوظيفة",
+  "title_en": "Final Job Readiness",
+  "score": {
+    "minimum": 0,
+    "maximum": 100,
+    "rounding": "nearest_integer",
+    "weights": {
+      "job_match_score": 0.6,
+      "skill_assessment_score": 0.4
+    },
+    "formula": "round((job_match_score * 0.6) + (skill_assessment_score * 0.4))",
+    "assessment_score_rules": {
+      "completed_assessments": "average_of_completed_required_skill_percentages",
+      "no_missing_required_skills": 100,
+      "missing_required_skills_without_completed_assessment": null
+    }
+  },
+  "statuses": [
+    {
+      "id": "ready_to_apply",
+      "minimum_score": 80,
+      "maximum_score": 100,
+      "rank": 3,
+      "label_ar": "جاهز للتقديم",
+      "label_en": "Ready to Apply",
+      "summary_ar": "مؤشرات الديمو توضح أن ملفك مناسب مبدئياً لهذه الوظيفة.",
+      "summary_en": "The demo indicators suggest that your profile is provisionally ready for this job.",
+      "color": "green",
+      "icon": "✅",
+      "primary_action": "view_job"
+    },
+    {
+      "id": "almost_ready",
+      "minimum_score": 60,
+      "maximum_score": 79,
+      "rank": 2,
+      "label_ar": "جاهز تقريباً",
+      "label_en": "Almost Ready",
+      "summary_ar": "يمكنك الاقتراب من الجاهزية بإكمال الفجوات ذات الأولوية ثم إعادة الاختبار.",
+      "summary_en": "You can move closer to readiness by addressing priority gaps and retaking the assessment.",
+      "color": "orange",
+      "icon": "🟠",
+      "primary_action": "review_roadmap"
+    },
+    {
+      "id": "needs_preparation",
+      "minimum_score": 0,
+      "maximum_score": 59,
+      "rank": 1,
+      "label_ar": "يحتاج إلى تجهيز",
+      "label_en": "Needs Preparation",
+      "summary_ar": "ابدأ بالمهارات المطلوبة ذات الأولوية قبل الاعتماد على هذه الوظيفة كخيار مناسب.",
+      "summary_en": "Start with the highest-priority required skills before treating this job as a strong fit.",
+      "color": "red",
+      "icon": "🔴",
+      "primary_action": "start_roadmap"
+    },
+    {
+      "id": "assessment_required",
+      "minimum_score": null,
+      "maximum_score": null,
+      "rank": 0,
+      "label_ar": "أكمل الاختبار أولاً",
+      "label_en": "Assessment Required",
+      "summary_ar": "توجد مهارات مطلوبة ناقصة، لذلك أكمل الاختبار القصير قبل حساب الجاهزية النهائية.",
+      "summary_en": "Required skill gaps exist, so complete the short assessment before calculating final readiness.",
+      "color": "blue",
+      "icon": "📝",
+      "primary_action": "take_assessment"
+    }
+  ],
+  "gates": [
+    {
+      "id": "require_assessment_for_missing_required_skills",
+      "priority": 1,
+      "condition": "missing_required_skills_count > 0 and completed_required_assessments_count == 0",
+      "effect": "set_status",
+      "status": "assessment_required",
+      "calculate_final_score": false
+    },
+    {
+      "id": "failed_required_skill_caps_readiness",
+      "priority": 2,
+      "condition": "failed_required_assessments_count > 0",
+      "effect": "cap_status",
+      "maximum_status": "almost_ready",
+      "message_ar": "يوجد اختبار غير ناجح لمهارة مطلوبة، لذلك لا يمكن تصنيف النتيجة كجاهز للتقديم.",
+      "message_en": "A required-skill assessment was not passed, so the result cannot be classified as Ready to Apply."
+    },
+    {
+      "id": "many_required_gaps_need_preparation",
+      "priority": 3,
+      "condition": "missing_required_skills_count >= 3",
+      "effect": "cap_status",
+      "maximum_status": "needs_preparation",
+      "message_ar": "توجد ثلاث مهارات مطلوبة ناقصة أو أكثر، لذلك الأولوية للتجهيز قبل التقديم.",
+      "message_en": "Three or more required skills are missing, so preparation should come before applying."
+    }
+  ],
+  "display": {
+    "max_strengths": 3,
+    "max_gaps": 3,
+    "show_formula_details": true,
+    "show_job_link": true,
+    "show_component_scores": true,
+    "fields_order": [
+      "readiness_status",
+      "readiness_score",
+      "job_match_score",
+      "skill_assessment_score",
+      "strengths",
+      "priority_gaps",
+      "next_action",
+      "job_link",
+      "disclaimer"
+    ],
+    "labels": {
+      "readiness_score_ar": "نسبة الجاهزية",
+      "readiness_score_en": "Readiness Score",
+      "job_match_ar": "مطابقة الملف مع الوظيفة",
+      "job_match_en": "Profile-to-Job Match",
+      "assessment_ar": "نتيجة اختبار المهارات",
+      "assessment_en": "Skill Assessment Result",
+      "strengths_ar": "نقاط القوة",
+      "strengths_en": "Strengths",
+      "gaps_ar": "الفجوات ذات الأولوية",
+      "gaps_en": "Priority Gaps",
+      "next_action_ar": "الخطوة التالية",
+      "next_action_en": "Next Action"
+    }
+  },
+  "actions": {
+    "view_job": {
+      "label_ar": "عرض الوظيفة والتقديم",
+      "label_en": "View Job and Apply",
+      "instruction_ar": "راجع الوصف مرة أخيرة ثم افتح رابط الوظيفة.",
+      "instruction_en": "Review the description once more, then open the job link."
+    },
+    "review_roadmap": {
+      "label_ar": "مراجعة خطة التطوير",
+      "label_en": "Review Learning Roadmap",
+      "instruction_ar": "أكمل المهارة ذات الأولوية ثم أعد الاختبار القصير.",
+      "instruction_en": "Complete the highest-priority skill roadmap, then retake the short assessment."
+    },
+    "start_roadmap": {
+      "label_ar": "ابدأ خطة سد الفجوة",
+      "label_en": "Start Skill-Gap Roadmap",
+      "instruction_ar": "ابدأ بأول مهارة مطلوبة ناقصة ولا تحاول معالجة جميع الفجوات دفعة واحدة.",
+      "instruction_en": "Start with the first missing required skill instead of addressing every gap at once."
+    },
+    "take_assessment": {
+      "label_ar": "ابدأ اختبار المهارات",
+      "label_en": "Start Skill Assessment",
+      "instruction_ar": "أكمل الاختبار القصير للمهارات المطلوبة الناقصة حتى تظهر نتيجة الجاهزية.",
+      "instruction_en": "Complete the short assessment for missing required skills to unlock the readiness result."
+    }
+  },
+  "empty_states": {
+    "missing_job_match": {
+      "ar": "اختر وظيفة أولاً حتى نحسب الجاهزية.",
+      "en": "Select a job before calculating readiness."
+    },
+    "missing_assessment": {
+      "ar": "أكمل اختبار المهارات المطلوب قبل إظهار النتيجة النهائية.",
+      "en": "Complete the required skill assessment before showing the final result."
+    },
+    "missing_job_link": {
+      "ar": "رابط الوظيفة غير متوفر في نسخة الديمو.",
+      "en": "The job link is unavailable in the demo."
+    }
+  },
+  "disclaimer": {
+    "ar": "هذه نتيجة إرشادية مبنية على بيانات الديمو، وليست ضماناً للتوظيف أو بديلاً عن تقييم الشركة.",
+    "en": "This is guidance based on demo data, not a hiring guarantee or a replacement for an employer's evaluation."
+  }
+}

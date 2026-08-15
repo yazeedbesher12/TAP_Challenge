@@ -10,4 +10,6 @@ def detect_language(text: str) -> str:
     return "ar" if ar else "en"
 
 def text_direction(text: str) -> str:
-    return "rtl" if detect_language(text) == "ar" else "ltr"
+    # Arabic-led code switching reads correctly in an RTL paragraph; embedded
+    # English terms retain their natural order through CSS bidi isolation.
+    return "rtl" if ARABIC_RE.search(text) else "ltr"

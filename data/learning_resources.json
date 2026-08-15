@@ -1,0 +1,499 @@
+{
+  "catalog_version": "1.0",
+  "catalog_type": "demo",
+  "description": "Static bilingual mini-roadmaps used by TAP Career Companion after skill-gap analysis.",
+  "rules": {
+    "max_roadmaps_per_job": 2,
+    "prioritize_required_skills": true,
+    "open_links_automatically": false
+  },
+  "resources": [
+    {
+      "skill": "Docker",
+      "aliases": ["docker", "containers", "containerization", "الحاويات"],
+      "estimated_hours": 6,
+      "why_ar": "يساعدك على تشغيل المشروع بنفس البيئة على أي جهاز، وهي مهارة مطلوبة في كثير من وظائف البرمجة والنشر.",
+      "why_en": "It lets you run a project consistently on any machine and is commonly required in software and deployment roles.",
+      "resource": {
+        "title": "Docker Get Started",
+        "provider": "Docker",
+        "url": "https://docs.docker.com/get-started/",
+        "type": "official_guide",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 1,
+          "ar": "افهم image وcontainer وDockerfile والأوامر الأساسية.",
+          "en": "Learn images, containers, Dockerfiles, and the basic commands."
+        },
+        {
+          "stage": "build",
+          "hours": 2,
+          "ar": "اكتب Dockerfile لتطبيق Python صغير وشغّله محلياً.",
+          "en": "Write a Dockerfile for a small Python app and run it locally."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "أوقف الحاوية، أعد بناءها، وتأكد أن التطبيق يعمل من تعليمات README فقط.",
+          "en": "Stop and rebuild the container, then verify the app works using only the README instructions."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 2,
+          "ar": "أضف Dockerfile وتعليمات التشغيل إلى أحد مشاريعك على GitHub.",
+          "en": "Add the Dockerfile and run instructions to one of your GitHub projects."
+        }
+      ],
+      "evidence_ar": "رابط GitHub يحتوي Dockerfile وREADME وصورة للتطبيق وهو يعمل.",
+      "evidence_en": "A GitHub link containing a Dockerfile, README, and a screenshot of the running app.",
+      "completion_criteria": [
+        "docker build completes successfully",
+        "docker run starts the application",
+        "README contains reproducible commands"
+      ]
+    },
+    {
+      "skill": "Automated Testing",
+      "aliases": ["pytest", "unit testing", "tests", "automated tests", "اختبارات آلية"],
+      "estimated_hours": 5,
+      "why_ar": "الاختبارات تثبت أن الكود يعمل وتقلل الأخطاء عند تعديل المشروع.",
+      "why_en": "Tests demonstrate that your code works and reduce regressions when the project changes.",
+      "resource": {
+        "title": "pytest: Get Started",
+        "provider": "pytest",
+        "url": "https://docs.pytest.org/en/stable/getting-started.html",
+        "type": "official_guide",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 1,
+          "ar": "تعلم شكل test بسيط، واستخدام assert، وكيفية تشغيل pytest.",
+          "en": "Learn the shape of a simple test, how assert works, and how to run pytest."
+        },
+        {
+          "stage": "build",
+          "hours": 2,
+          "ar": "اكتب خمس اختبارات لدوال حقيقية في مشروعك، تشمل حالة نجاح وحالة خطأ.",
+          "en": "Write five tests for real project functions, including success and failure cases."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "اكسر إحدى الدوال عمداً وتأكد أن الاختبار يكتشف المشكلة، ثم أصلحها.",
+          "en": "Intentionally break one function, verify a test catches it, then fix it."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "أضف مجلد tests وأمر التشغيل ونتيجة الاختبارات إلى README.",
+          "en": "Add the tests folder, run command, and test result to the README."
+        }
+      ],
+      "evidence_ar": "رابط مستودع فيه اختبارات ناجحة وتعليمات تشغيل واضحة.",
+      "evidence_en": "A repository link with passing tests and clear run instructions.",
+      "completion_criteria": [
+        "at least five meaningful tests exist",
+        "success and failure cases are covered",
+        "pytest command passes locally"
+      ]
+    },
+    {
+      "skill": "Git and GitHub",
+      "aliases": ["git", "github", "version control", "git/github", "إدارة الإصدارات"],
+      "estimated_hours": 5,
+      "why_ar": "Git هو الأساس لتتبع التعديلات والعمل ضمن فريق وعرض مشاريعك للشركات.",
+      "why_en": "Git is essential for tracking changes, collaborating, and presenting projects to employers.",
+      "resource": {
+        "title": "GitHub Learn",
+        "provider": "GitHub",
+        "url": "https://learn.github.com/",
+        "type": "official_learning_portal",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 1,
+          "ar": "تعلم repository وcommit وbranch وmerge وpull request.",
+          "en": "Learn repositories, commits, branches, merges, and pull requests."
+        },
+        {
+          "stage": "build",
+          "hours": 2,
+          "ar": "أنشئ مستودعاً، اعمل فرع feature، ونفّذ عدة commits واضحة.",
+          "en": "Create a repository, work on a feature branch, and make several clear commits."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "افتح Pull Request لنفسك، راجع الفرق، ثم ادمجه.",
+          "en": "Open a pull request to yourself, review the diff, and merge it."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "رتّب README وثبّت أهم مشروع في واجهة حسابك.",
+          "en": "Polish the README and pin your strongest project on your profile."
+        }
+      ],
+      "evidence_ar": "مستودع عام فيه README وفرع وPull Request وcommits بأسماء واضحة.",
+      "evidence_en": "A public repository with a README, branch, pull request, and clearly named commits.",
+      "completion_criteria": [
+        "repository has a useful README",
+        "feature work was completed on a branch",
+        "a pull request was reviewed and merged"
+      ]
+    },
+    {
+      "skill": "REST APIs",
+      "aliases": ["rest", "rest api", "apis", "api", "http api", "واجهات برمجية"],
+      "estimated_hours": 7,
+      "why_ar": "معظم تطبيقات الويب تتبادل البيانات عبر HTTP وواجهات API.",
+      "why_en": "Most web applications exchange data through HTTP APIs.",
+      "resource": {
+        "title": "HTTP Overview",
+        "provider": "MDN Web Docs",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+        "type": "technical_guide",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 2,
+          "ar": "افهم GET وPOST وPUT وDELETE وstatus codes وJSON.",
+          "en": "Learn GET, POST, PUT, DELETE, status codes, and JSON."
+        },
+        {
+          "stage": "build",
+          "hours": 3,
+          "ar": "ابنِ API صغيرة لإضافة وعرض وتعديل وحذف عناصر.",
+          "en": "Build a small API that creates, lists, updates, and deletes items."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "اختبر الحالات الصحيحة والخاطئة وتأكد من status codes المناسبة.",
+          "en": "Test valid and invalid cases and verify appropriate status codes."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "وثّق endpoints مع أمثلة request وresponse في README.",
+          "en": "Document endpoints with request and response examples in the README."
+        }
+      ],
+      "evidence_ar": "رابط مشروع API موثّق مع أمثلة تشغيل واختبار.",
+      "evidence_en": "A documented API project with run and test examples.",
+      "completion_criteria": [
+        "CRUD endpoints work",
+        "invalid input returns clear errors",
+        "README documents requests and responses"
+      ]
+    },
+    {
+      "skill": "Flask",
+      "aliases": ["flask", "python flask", "flask framework"],
+      "estimated_hours": 7,
+      "why_ar": "Flask إطار Python خفيف لبناء تطبيقات ويب وواجهات API بسرعة.",
+      "why_en": "Flask is a lightweight Python framework for quickly building web apps and APIs.",
+      "resource": {
+        "title": "Flask Quickstart",
+        "provider": "Pallets",
+        "url": "https://flask.palletsprojects.com/en/stable/quickstart/",
+        "type": "official_guide",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 2,
+          "ar": "تعلم app وroutes وrequest وresponse والقوالب الأساسية.",
+          "en": "Learn the app object, routes, requests, responses, and basic templates."
+        },
+        {
+          "stage": "build",
+          "hours": 3,
+          "ar": "ابنِ تطبيق مهام صغيراً فيه عرض وإضافة وحذف.",
+          "en": "Build a small task app with list, add, and delete actions."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "اختبر route صحيحة و404 ومدخلات ناقصة.",
+          "en": "Test a valid route, a 404 case, and missing input."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "أضف صوراً وتعليمات تثبيت وتشغيل إلى README.",
+          "en": "Add screenshots and installation and run instructions to the README."
+        }
+      ],
+      "evidence_ar": "مستودع Flask يعمل مع README وصور واختبارات أساسية.",
+      "evidence_en": "A working Flask repository with a README, screenshots, and basic tests.",
+      "completion_criteria": [
+        "application starts locally",
+        "core routes work",
+        "README explains setup and use"
+      ]
+    },
+    {
+      "skill": "FastAPI",
+      "aliases": ["fastapi", "fast api", "python api framework"],
+      "estimated_hours": 7,
+      "why_ar": "FastAPI مناسب لبناء APIs حديثة في Python مع توثيق تلقائي والتحقق من البيانات.",
+      "why_en": "FastAPI is suited to modern Python APIs with automatic documentation and data validation.",
+      "resource": {
+        "title": "FastAPI Tutorial",
+        "provider": "FastAPI",
+        "url": "https://fastapi.tiangolo.com/tutorial/",
+        "type": "official_tutorial",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 2,
+          "ar": "تعلم path operations وPydantic models والتوثيق التلقائي.",
+          "en": "Learn path operations, Pydantic models, and automatic documentation."
+        },
+        {
+          "stage": "build",
+          "hours": 3,
+          "ar": "ابنِ API صغيرة للوظائف فيها فلترة حسب المهارة والموقع.",
+          "en": "Build a small jobs API with skill and location filters."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "جرّب Swagger وأرسل مدخلات خاطئة للتأكد من validation.",
+          "en": "Use Swagger and submit invalid input to verify validation."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "أضف صور Swagger وأمثلة endpoints إلى README.",
+          "en": "Add Swagger screenshots and endpoint examples to the README."
+        }
+      ],
+      "evidence_ar": "رابط API يعمل محلياً مع توثيق Swagger وأمثلة واضحة.",
+      "evidence_en": "A locally working API with Swagger documentation and clear examples.",
+      "completion_criteria": [
+        "API validates request data",
+        "filter endpoints work",
+        "automatic documentation is accessible"
+      ]
+    },
+    {
+      "skill": "SQL",
+      "aliases": ["sql", "databases", "relational database", "قواعد البيانات"],
+      "estimated_hours": 8,
+      "why_ar": "SQL مطلوبة للتعامل مع بيانات معظم التطبيقات والتقارير.",
+      "why_en": "SQL is required to work with data in most applications and reporting systems.",
+      "resource": {
+        "title": "SQLBolt",
+        "provider": "SQLBolt",
+        "url": "https://sqlbolt.com/",
+        "type": "interactive_lessons",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 3,
+          "ar": "تدرب على SELECT وWHERE وORDER BY وGROUP BY وJOIN.",
+          "en": "Practice SELECT, WHERE, ORDER BY, GROUP BY, and JOIN."
+        },
+        {
+          "stage": "build",
+          "hours": 2,
+          "ar": "صمم جداول بسيطة للوظائف والشركات والطلبات وأضف بيانات تجريبية.",
+          "en": "Design simple jobs, companies, and applications tables and add sample data."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 2,
+          "ar": "اكتب عشر queries تجيب عن أسئلة فعلية، منها JOIN وتجميع.",
+          "en": "Write ten queries that answer real questions, including joins and aggregation."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "ارفع schema وملف queries مع شرح النتائج إلى GitHub.",
+          "en": "Publish the schema and query file with result explanations on GitHub."
+        }
+      ],
+      "evidence_ar": "مستودع يحتوي schema وبيانات تجريبية وعشر queries موثقة.",
+      "evidence_en": "A repository containing a schema, sample data, and ten documented queries.",
+      "completion_criteria": [
+        "schema has meaningful relationships",
+        "at least one JOIN and one aggregation work",
+        "queries are documented"
+      ]
+    },
+    {
+      "skill": "Pandas",
+      "aliases": ["pandas", "data analysis", "data cleaning", "تحليل البيانات"],
+      "estimated_hours": 7,
+      "why_ar": "Pandas أداة أساسية لتنظيف البيانات وتحليلها في Python.",
+      "why_en": "Pandas is a core Python tool for cleaning and analyzing data.",
+      "resource": {
+        "title": "Pandas Getting Started Tutorials",
+        "provider": "pandas",
+        "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/",
+        "type": "official_tutorials",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 2,
+          "ar": "تعلم DataFrame والفلترة والقيم الناقصة والتجميع.",
+          "en": "Learn DataFrames, filtering, missing values, and grouping."
+        },
+        {
+          "stage": "build",
+          "hours": 2,
+          "ar": "حلل ملف وظائف تجريبي ونظف الحقول غير المكتملة.",
+          "en": "Analyze a sample jobs file and clean incomplete fields."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 2,
+          "ar": "استخرج أعلى المهارات والوظائف حسب الموقع واختبر النتائج يدوياً.",
+          "en": "Extract top skills and jobs by location and manually verify the results."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 1,
+          "ar": "ارفع notebook نظيفاً مع ثلاثة استنتاجات ورسوم بسيطة.",
+          "en": "Publish a clean notebook with three findings and simple charts."
+        }
+      ],
+      "evidence_ar": "Notebook قابل للتشغيل يعرض التنظيف والتحليل وثلاثة استنتاجات.",
+      "evidence_en": "A runnable notebook showing cleaning, analysis, and three findings.",
+      "completion_criteria": [
+        "missing data is handled",
+        "analysis answers three clear questions",
+        "notebook runs from start to finish"
+      ]
+    },
+    {
+      "skill": "Machine Learning",
+      "aliases": ["machine learning", "ml", "scikit-learn", "sklearn", "تعلم الآلة"],
+      "estimated_hours": 10,
+      "why_ar": "المهارة تثبت قدرتك على تجهيز البيانات وتدريب نموذج وتقييمه بطريقة صحيحة.",
+      "why_en": "This skill demonstrates that you can prepare data, train a model, and evaluate it correctly.",
+      "resource": {
+        "title": "scikit-learn Getting Started",
+        "provider": "scikit-learn",
+        "url": "https://scikit-learn.org/stable/getting_started.html",
+        "type": "official_guide",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 3,
+          "ar": "افهم features وtarget وتقسيم train/test وoverfitting ومقاييس التقييم.",
+          "en": "Learn features, targets, train/test splits, overfitting, and evaluation metrics."
+        },
+        {
+          "stage": "build",
+          "hours": 3,
+          "ar": "درّب نموذج تصنيف بسيط على dataset صغيرة باستخدام Pipeline.",
+          "en": "Train a simple classifier on a small dataset using a Pipeline."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 2,
+          "ar": "قارن baseline بالنموذج واشرح metric واحدة على الأقل.",
+          "en": "Compare a baseline with the model and explain at least one metric."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 2,
+          "ar": "ارفع notebook وREADME يشرح المشكلة والنتائج والقيود.",
+          "en": "Publish a notebook and README explaining the problem, results, and limitations."
+        }
+      ],
+      "evidence_ar": "Notebook قابل لإعادة التشغيل مع baseline وmetric وشرح للقيود.",
+      "evidence_en": "A reproducible notebook with a baseline, a metric, and limitations.",
+      "completion_criteria": [
+        "train and test data are separated",
+        "model is compared with a baseline",
+        "results and limitations are explained"
+      ]
+    },
+    {
+      "skill": "Cloud Deployment",
+      "aliases": ["deployment", "deploy", "cloud", "render", "hosting", "النشر السحابي"],
+      "estimated_hours": 6,
+      "why_ar": "نشر المشروع يجعل صاحب العمل قادراً على تجربته مباشرة بدل الاكتفاء بمشاهدة الكود.",
+      "why_en": "Deployment lets an employer try your project instead of only reading its code.",
+      "resource": {
+        "title": "Deploy a Flask App on Render",
+        "provider": "Render",
+        "url": "https://render.com/docs/deploy-flask",
+        "type": "deployment_guide",
+        "free": true
+      },
+      "roadmap": [
+        {
+          "stage": "learn",
+          "hours": 1,
+          "ar": "افهم build command وstart command والمتغيرات البيئية والسجلات.",
+          "en": "Learn build commands, start commands, environment variables, and logs."
+        },
+        {
+          "stage": "build",
+          "hours": 2,
+          "ar": "جهّز requirements.txt وأمر التشغيل وانشر تطبيقاً صغيراً.",
+          "en": "Prepare requirements.txt and a start command, then deploy a small app."
+        },
+        {
+          "stage": "evaluate",
+          "hours": 1,
+          "ar": "افتح الرابط من جهاز آخر وتحقق من الصفحات والسجلات.",
+          "en": "Open the URL from another device and verify the pages and logs."
+        },
+        {
+          "stage": "portfolio",
+          "hours": 2,
+          "ar": "أضف رابط النسخة الحية إلى README والسيرة الذاتية.",
+          "en": "Add the live link to the README and your CV."
+        }
+      ],
+      "evidence_ar": "رابط حي يعمل مع رابط GitHub وتعليمات النشر.",
+      "evidence_en": "A working live URL with a GitHub link and deployment instructions.",
+      "completion_criteria": [
+        "public URL loads successfully",
+        "deployment logs show no startup errors",
+        "README links to the live project"
+      ]
+    }
+  ],
+  "fallback": {
+    "estimated_hours": 6,
+    "ar": [
+      "اقرأ مقدمة موثوقة عن المهارة لمدة ساعتين.",
+      "ابنِ تمريناً صغيراً يثبت استخدام المهارة لمدة ساعتين.",
+      "اطلب تقييماً من مرشد أو زميل وحسّن التمرين لمدة ساعة.",
+      "أضف النتيجة إلى GitHub أو ملف أعمالك لمدة ساعة."
+    ],
+    "en": [
+      "Study a trusted introduction to the skill for two hours.",
+      "Build a small exercise that demonstrates the skill for two hours.",
+      "Ask a mentor or peer for feedback and improve it for one hour.",
+      "Add the result to GitHub or your portfolio for one hour."
+    ],
+    "warning_ar": "لا يوجد مصدر محدد لهذه المهارة في نسخة الديمو؛ استخدم الخطة العامة ولا تدّعي إكمالها قبل تقديم دليل.",
+    "warning_en": "No specific resource exists for this skill in the demo; use the generic plan and do not claim completion without evidence."
+  }
+}

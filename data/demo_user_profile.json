@@ -1,0 +1,73 @@
+{
+  "profile_id": "demo_user_001",
+  "profile_type": "demo",
+  "personal_information": {
+    "display_name": "Omar Khalil",
+    "email": "omar.khalil@example.com",
+    "city": "Nablus",
+    "country": "Palestine",
+    "preferred_language": "mixed"
+  },
+  "career_profile": {
+    "target_role": "Backend Developer",
+    "bridge_role": "Junior Data Engineer",
+    "dream_role": "AI Engineer",
+    "experience_level": "entry_level",
+    "years_of_experience": 0.8,
+    "education": "BSc in Computer Engineering",
+    "graduation_year": 2026
+  },
+  "skills": [
+    "Python",
+    "Flask",
+    "SQL",
+    "Git",
+    "REST APIs",
+    "Pandas",
+    "HTML",
+    "CSS"
+  ],
+  "skill_levels": {
+    "Python": "intermediate",
+    "Flask": "intermediate",
+    "SQL": "intermediate",
+    "Git": "intermediate",
+    "REST APIs": "intermediate",
+    "Pandas": "beginner",
+    "HTML": "intermediate",
+    "CSS": "beginner"
+  },
+  "projects": [
+    {
+      "name": "Task Management REST API",
+      "description": "A Flask REST API with user authentication and SQL database integration.",
+      "technologies": ["Python", "Flask", "SQL", "REST APIs", "Git"]
+    },
+    {
+      "name": "Air Quality Data Analysis",
+      "description": "A small data-analysis project that cleans and analyzes environmental sensor readings.",
+      "technologies": ["Python", "Pandas", "SQL"]
+    }
+  ],
+  "languages": {
+    "Arabic": "native",
+    "English": "B2"
+  },
+  "work_preferences": {
+    "preferred_modes": ["remote", "hybrid"],
+    "preferred_regions": ["Palestine", "MENA", "Worldwide Remote"],
+    "contract_types": ["full_time", "internship"],
+    "available_hours_per_week": 40,
+    "available_to_start": "immediately"
+  },
+  "current_skill_gaps": [
+    "Docker",
+    "Automated Testing",
+    "Cloud Deployment"
+  ],
+  "privacy": {
+    "is_fictional_demo_profile": true,
+    "allow_job_matching": true,
+    "allow_local_memory": false
+  }
+}

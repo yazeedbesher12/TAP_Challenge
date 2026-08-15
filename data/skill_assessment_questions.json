@@ -1,0 +1,544 @@
+{
+  "catalog_version": "1.0",
+  "catalog_type": "demo",
+  "title_ar": "اختبار المهارات القصير",
+  "title_en": "Mini Skill Verification",
+  "assessment_rules": {
+    "questions_per_skill": 3,
+    "max_skills_per_assessment": 2,
+    "passing_score_percentage": 67,
+    "shuffle_questions": false,
+    "shuffle_options": false,
+    "persist_results": false
+  },
+  "result_labels": {
+    "passed": {
+      "ar": "جاهز مبدئياً لهذه المهارة",
+      "en": "Provisionally ready for this skill"
+    },
+    "needs_practice": {
+      "ar": "تحتاج إلى تدريب إضافي",
+      "en": "More practice is recommended"
+    },
+    "not_assessed": {
+      "ar": "لم يتم تقييم هذه المهارة",
+      "en": "This skill was not assessed"
+    }
+  },
+  "assessments": [
+    {
+      "skill": "Docker",
+      "aliases": ["docker", "containers", "containerization", "الحاويات"],
+      "questions": [
+        {
+          "id": "docker_q1",
+          "difficulty": "basic",
+          "question_ar": "ما الوظيفة الأساسية لملف Dockerfile؟",
+          "question_en": "What is the main purpose of a Dockerfile?",
+          "options": [
+            {"id": "a", "ar": "تخزين كلمات المرور", "en": "Store passwords"},
+            {"id": "b", "ar": "تحديد خطوات بناء Docker image", "en": "Define the steps used to build a Docker image"},
+            {"id": "c", "ar": "إدارة فروع Git", "en": "Manage Git branches"},
+            {"id": "d", "ar": "تشغيل اختبارات المتصفح فقط", "en": "Run browser tests only"}
+          ],
+          "correct_option_id": "b",
+          "explanation_ar": "يحتوي Dockerfile على تعليمات بناء الـimage وتجهيز بيئة التطبيق.",
+          "explanation_en": "A Dockerfile contains instructions for building an image and preparing the application environment."
+        },
+        {
+          "id": "docker_q2",
+          "difficulty": "basic",
+          "question_ar": "ما الفرق الصحيح بين Docker image وcontainer؟",
+          "question_en": "Which statement correctly describes a Docker image and container?",
+          "options": [
+            {"id": "a", "ar": "الـimage نسخة تشغيلية والـcontainer ملف نصي", "en": "An image is a running instance and a container is a text file"},
+            {"id": "b", "ar": "لا يوجد فرق بينهما", "en": "There is no difference"},
+            {"id": "c", "ar": "الـimage قالب ثابت والـcontainer نسخة تعمل منه", "en": "An image is a template and a container is a running instance of it"},
+            {"id": "d", "ar": "الـcontainer يُستخدم فقط مع قواعد البيانات", "en": "A container is only used with databases"}
+          ],
+          "correct_option_id": "c",
+          "explanation_ar": "الـimage قالب جاهز، وعند تشغيله نحصل على container.",
+          "explanation_en": "An image is a prepared template; running it creates a container."
+        },
+        {
+          "id": "docker_q3",
+          "difficulty": "basic",
+          "question_ar": "أي أمر يُستخدم عادة لبناء image من Dockerfile في المجلد الحالي؟",
+          "question_en": "Which command normally builds an image from the Dockerfile in the current directory?",
+          "options": [
+            {"id": "a", "ar": "docker build -t tap-app .", "en": "docker build -t tap-app ."},
+            {"id": "b", "ar": "docker delete tap-app", "en": "docker delete tap-app"},
+            {"id": "c", "ar": "docker branch tap-app", "en": "docker branch tap-app"},
+            {"id": "d", "ar": "docker test .", "en": "docker test ."}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "docker build يبني الـimage، والنقطة تعني استخدام المجلد الحالي كـbuild context.",
+          "explanation_en": "docker build creates the image, and the dot uses the current directory as the build context."
+        }
+      ]
+    },
+    {
+      "skill": "Automated Testing",
+      "aliases": ["pytest", "unit testing", "tests", "automated tests", "اختبارات آلية"],
+      "questions": [
+        {
+          "id": "testing_q1",
+          "difficulty": "basic",
+          "question_ar": "ما الهدف الأساسي من assert داخل اختبار pytest؟",
+          "question_en": "What is the main purpose of assert in a pytest test?",
+          "options": [
+            {"id": "a", "ar": "التحقق أن النتيجة تطابق المتوقع", "en": "Check that the result matches the expectation"},
+            {"id": "b", "ar": "تثبيت مكتبة جديدة", "en": "Install a new library"},
+            {"id": "c", "ar": "نشر التطبيق", "en": "Deploy the application"},
+            {"id": "d", "ar": "إنشاء قاعدة بيانات", "en": "Create a database"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "يفشل الاختبار عندما يكون شرط assert غير صحيح.",
+          "explanation_en": "The test fails when the assert condition is false."
+        },
+        {
+          "id": "testing_q2",
+          "difficulty": "basic",
+          "question_ar": "ما الذي يختبره Unit Test عادة؟",
+          "question_en": "What does a unit test normally test?",
+          "options": [
+            {"id": "a", "ar": "النظام كاملاً مع كل الخدمات الخارجية", "en": "The complete system with all external services"},
+            {"id": "b", "ar": "وحدة صغيرة مثل دالة أو method", "en": "A small unit such as a function or method"},
+            {"id": "c", "ar": "سرعة الإنترنت", "en": "Internet speed"},
+            {"id": "d", "ar": "تصميم الشعار", "en": "Logo design"}
+          ],
+          "correct_option_id": "b",
+          "explanation_ar": "Unit Test يركّز على جزء صغير ومعزول من الكود.",
+          "explanation_en": "A unit test focuses on a small, isolated part of the code."
+        },
+        {
+          "id": "testing_q3",
+          "difficulty": "basic",
+          "question_ar": "إذا عدلت دالة وفشل اختبار كان ينجح سابقاً، ماذا يعني ذلك غالباً؟",
+          "question_en": "If you change a function and a previously passing test fails, what does that usually indicate?",
+          "options": [
+            {"id": "a", "ar": "الاختبارات لم تعد مهمة", "en": "Tests are no longer useful"},
+            {"id": "b", "ar": "قد يكون التعديل سبب regression أو غيّر السلوك المتوقع", "en": "The change may have caused a regression or altered expected behavior"},
+            {"id": "c", "ar": "يجب حذف الاختبار مباشرة", "en": "The test should immediately be deleted"},
+            {"id": "d", "ar": "المشكلة دائماً من نظام التشغيل", "en": "The operating system is always the problem"}
+          ],
+          "correct_option_id": "b",
+          "explanation_ar": "فشل اختبار سابق قد يكشف أن التعديل كسر سلوكاً موجوداً أو أن التوقع يحتاج مراجعة.",
+          "explanation_en": "A failed existing test may reveal a regression or a deliberate behavior change that needs review."
+        }
+      ]
+    },
+    {
+      "skill": "Git and GitHub",
+      "aliases": ["git", "github", "version control", "git/github", "إدارة الإصدارات"],
+      "questions": [
+        {
+          "id": "git_q1",
+          "difficulty": "basic",
+          "question_ar": "ماذا يفعل Git commit؟",
+          "question_en": "What does a Git commit do?",
+          "options": [
+            {"id": "a", "ar": "يسجل لقطة للتغييرات المجهزة مع رسالة", "en": "Records a snapshot of staged changes with a message"},
+            {"id": "b", "ar": "يحذف المستودع البعيد", "en": "Deletes the remote repository"},
+            {"id": "c", "ar": "ينشر الموقع تلقائياً", "en": "Automatically deploys the website"},
+            {"id": "d", "ar": "يغيّر لغة البرمجة", "en": "Changes the programming language"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "الـcommit يحفظ لقطة واضحة من التغييرات داخل تاريخ المستودع.",
+          "explanation_en": "A commit saves a clear snapshot of changes in the repository history."
+        },
+        {
+          "id": "git_q2",
+          "difficulty": "basic",
+          "question_ar": "لماذا نستخدم branch عند تطوير ميزة جديدة؟",
+          "question_en": "Why use a branch when developing a new feature?",
+          "options": [
+            {"id": "a", "ar": "لعزل العمل عن الفرع الرئيسي حتى يصبح جاهزاً", "en": "To isolate work from the main branch until it is ready"},
+            {"id": "b", "ar": "لزيادة سرعة الجهاز", "en": "To make the computer faster"},
+            {"id": "c", "ar": "لاستبدال README", "en": "To replace the README"},
+            {"id": "d", "ar": "لتشفير كلمات المرور", "en": "To encrypt passwords"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "الفرع يسمح بتطوير وتجربة الميزة دون التأثير المباشر على main.",
+          "explanation_en": "A branch allows the feature to be developed and tested without directly affecting main."
+        },
+        {
+          "id": "git_q3",
+          "difficulty": "basic",
+          "question_ar": "ما الهدف الأساسي من Pull Request؟",
+          "question_en": "What is the primary purpose of a pull request?",
+          "options": [
+            {"id": "a", "ar": "مراجعة التغييرات ومناقشتها قبل الدمج", "en": "Review and discuss changes before merging"},
+            {"id": "b", "ar": "حذف كل الفروع", "en": "Delete every branch"},
+            {"id": "c", "ar": "تشغيل Docker", "en": "Run Docker"},
+            {"id": "d", "ar": "تنزيل محرر كود", "en": "Download a code editor"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "Pull Request يعرض الفرق ويسمح بالمراجعة قبل دمجه في الفرع المستهدف.",
+          "explanation_en": "A pull request shows the diff and supports review before merging into the target branch."
+        }
+      ]
+    },
+    {
+      "skill": "REST APIs",
+      "aliases": ["rest", "rest api", "apis", "api", "http api", "واجهات برمجية"],
+      "questions": [
+        {
+          "id": "rest_q1",
+          "difficulty": "basic",
+          "question_ar": "أي HTTP method يُستخدم عادة لجلب بيانات دون تعديلها؟",
+          "question_en": "Which HTTP method is normally used to retrieve data without changing it?",
+          "options": [
+            {"id": "a", "ar": "GET", "en": "GET"},
+            {"id": "b", "ar": "DELETE", "en": "DELETE"},
+            {"id": "c", "ar": "PATCH", "en": "PATCH"},
+            {"id": "d", "ar": "CONNECT", "en": "CONNECT"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "GET يُستخدم عادة لقراءة أو جلب resource.",
+          "explanation_en": "GET is normally used to read or retrieve a resource."
+        },
+        {
+          "id": "rest_q2",
+          "difficulty": "basic",
+          "question_ar": "ماذا يعني HTTP status code 404؟",
+          "question_en": "What does HTTP status code 404 mean?",
+          "options": [
+            {"id": "a", "ar": "تم إنشاء المورد", "en": "The resource was created"},
+            {"id": "b", "ar": "المورد المطلوب غير موجود", "en": "The requested resource was not found"},
+            {"id": "c", "ar": "الطلب ناجح دائماً", "en": "The request is always successful"},
+            {"id": "d", "ar": "يجب إعادة تشغيل الجهاز", "en": "The computer must be restarted"}
+          ],
+          "correct_option_id": "b",
+          "explanation_ar": "404 Not Found يعني أن الخادم لم يجد المورد المطلوب.",
+          "explanation_en": "404 Not Found means the server could not find the requested resource."
+        },
+        {
+          "id": "rest_q3",
+          "difficulty": "basic",
+          "question_ar": "أي صيغة بيانات شائعة في REST APIs الحديثة؟",
+          "question_en": "Which data format is common in modern REST APIs?",
+          "options": [
+            {"id": "a", "ar": "JSON", "en": "JSON"},
+            {"id": "b", "ar": "PSD", "en": "PSD"},
+            {"id": "c", "ar": "MP3", "en": "MP3"},
+            {"id": "d", "ar": "EXE", "en": "EXE"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "JSON صيغة خفيفة ومستخدمة بكثرة لإرسال واستقبال البيانات.",
+          "explanation_en": "JSON is a lightweight format commonly used to exchange API data."
+        }
+      ]
+    },
+    {
+      "skill": "Flask",
+      "aliases": ["flask", "python flask", "flask framework"],
+      "questions": [
+        {
+          "id": "flask_q1",
+          "difficulty": "basic",
+          "question_ar": "ما وظيفة @app.route في Flask؟",
+          "question_en": "What does @app.route do in Flask?",
+          "options": [
+            {"id": "a", "ar": "يربط URL بدالة Python", "en": "Maps a URL to a Python function"},
+            {"id": "b", "ar": "يثبت Python", "en": "Installs Python"},
+            {"id": "c", "ar": "ينشئ Docker image", "en": "Creates a Docker image"},
+            {"id": "d", "ar": "يحذف ملفات المشروع", "en": "Deletes project files"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "Route decorator يحدد الدالة التي تتعامل مع مسار URL معيّن.",
+          "explanation_en": "The route decorator specifies which function handles a given URL path."
+        },
+        {
+          "id": "flask_q2",
+          "difficulty": "basic",
+          "question_ar": "من أين نقرأ عادة بيانات JSON المرسلة في request داخل Flask؟",
+          "question_en": "Where do you normally read JSON sent in a Flask request?",
+          "options": [
+            {"id": "a", "ar": "request.get_json()", "en": "request.get_json()"},
+            {"id": "b", "ar": "app.commit()", "en": "app.commit()"},
+            {"id": "c", "ar": "route.install()", "en": "route.install()"},
+            {"id": "d", "ar": "json.deploy()", "en": "json.deploy()"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "request.get_json() تحاول قراءة body الطلب كبيانات JSON.",
+          "explanation_en": "request.get_json() reads the request body as JSON data."
+        },
+        {
+          "id": "flask_q3",
+          "difficulty": "basic",
+          "question_ar": "ما النتيجة المناسبة عند طلب route غير موجودة؟",
+          "question_en": "What is the appropriate result when a requested route does not exist?",
+          "options": [
+            {"id": "a", "ar": "404 Not Found", "en": "404 Not Found"},
+            {"id": "b", "ar": "201 Created", "en": "201 Created"},
+            {"id": "c", "ar": "100 Continue دائماً", "en": "Always 100 Continue"},
+            {"id": "d", "ar": "حذف التطبيق", "en": "Delete the application"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "المسار غير الموجود يجب أن ينتج 404.",
+          "explanation_en": "A route that does not exist should produce a 404 response."
+        }
+      ]
+    },
+    {
+      "skill": "FastAPI",
+      "aliases": ["fastapi", "fast api", "python api framework"],
+      "questions": [
+        {
+          "id": "fastapi_q1",
+          "difficulty": "basic",
+          "question_ar": "ما فائدة Pydantic models في FastAPI؟",
+          "question_en": "What is a main benefit of Pydantic models in FastAPI?",
+          "options": [
+            {"id": "a", "ar": "التحقق من شكل وأنواع بيانات الطلب", "en": "Validate the structure and types of request data"},
+            {"id": "b", "ar": "تصميم شعار التطبيق", "en": "Design the application logo"},
+            {"id": "c", "ar": "إدارة فروع Git", "en": "Manage Git branches"},
+            {"id": "d", "ar": "استبدال نظام التشغيل", "en": "Replace the operating system"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "Pydantic يساعد على validation وتحويل البيانات باستخدام type hints.",
+          "explanation_en": "Pydantic validates and parses data using type hints."
+        },
+        {
+          "id": "fastapi_q2",
+          "difficulty": "basic",
+          "question_ar": "أين تظهر واجهة Swagger التفاعلية افتراضياً غالباً؟",
+          "question_en": "Where is the interactive Swagger UI normally available by default?",
+          "options": [
+            {"id": "a", "ar": "/docs", "en": "/docs"},
+            {"id": "b", "ar": "/database", "en": "/database"},
+            {"id": "c", "ar": "/git", "en": "/git"},
+            {"id": "d", "ar": "/dockerfile", "en": "/dockerfile"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "FastAPI يولد توثيق Swagger تفاعلياً على /docs افتراضياً.",
+          "explanation_en": "FastAPI generates interactive Swagger documentation at /docs by default."
+        },
+        {
+          "id": "fastapi_q3",
+          "difficulty": "basic",
+          "question_ar": "أي decorator يعرّف GET endpoint للمسار /jobs؟",
+          "question_en": "Which decorator defines a GET endpoint for /jobs?",
+          "options": [
+            {"id": "a", "ar": "@app.get('/jobs')", "en": "@app.get('/jobs')"},
+            {"id": "b", "ar": "@app.sql('/jobs')", "en": "@app.sql('/jobs')"},
+            {"id": "c", "ar": "@app.docker('/jobs')", "en": "@app.docker('/jobs')"},
+            {"id": "d", "ar": "@app.commit('/jobs')", "en": "@app.commit('/jobs')"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "@app.get يربط المسار بعملية HTTP GET.",
+          "explanation_en": "@app.get maps the path to an HTTP GET operation."
+        }
+      ]
+    },
+    {
+      "skill": "SQL",
+      "aliases": ["sql", "databases", "relational database", "قواعد البيانات"],
+      "questions": [
+        {
+          "id": "sql_q1",
+          "difficulty": "basic",
+          "question_ar": "أي SQL statement تُستخدم لقراءة البيانات؟",
+          "question_en": "Which SQL statement is used to read data?",
+          "options": [
+            {"id": "a", "ar": "SELECT", "en": "SELECT"},
+            {"id": "b", "ar": "DROP", "en": "DROP"},
+            {"id": "c", "ar": "COMMIT فقط", "en": "COMMIT only"},
+            {"id": "d", "ar": "RENAME فقط", "en": "RENAME only"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "SELECT تسترجع صفوفاً وأعمدة من جدول أو أكثر.",
+          "explanation_en": "SELECT retrieves rows and columns from one or more tables."
+        },
+        {
+          "id": "sql_q2",
+          "difficulty": "basic",
+          "question_ar": "ما وظيفة WHERE في SQL query؟",
+          "question_en": "What does WHERE do in an SQL query?",
+          "options": [
+            {"id": "a", "ar": "تفلتر الصفوف حسب شرط", "en": "Filters rows using a condition"},
+            {"id": "b", "ar": "تنشئ صورة", "en": "Creates an image"},
+            {"id": "c", "ar": "تدمج Git branches", "en": "Merges Git branches"},
+            {"id": "d", "ar": "تشغّل الخادم", "en": "Starts the server"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "WHERE تحدد الصفوف التي تحقق الشرط المطلوب.",
+          "explanation_en": "WHERE selects only the rows that satisfy the condition."
+        },
+        {
+          "id": "sql_q3",
+          "difficulty": "basic",
+          "question_ar": "متى نستخدم JOIN؟",
+          "question_en": "When do we use JOIN?",
+          "options": [
+            {"id": "a", "ar": "لجمع بيانات مرتبطة من جدولين أو أكثر", "en": "To combine related data from two or more tables"},
+            {"id": "b", "ar": "لحذف Python", "en": "To uninstall Python"},
+            {"id": "c", "ar": "لتغيير لون الواجهة", "en": "To change the UI color"},
+            {"id": "d", "ar": "لبناء Docker image", "en": "To build a Docker image"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "JOIN تربط الصفوف اعتماداً على عمود أو علاقة مشتركة.",
+          "explanation_en": "JOIN connects rows using a shared column or relationship."
+        }
+      ]
+    },
+    {
+      "skill": "Pandas",
+      "aliases": ["pandas", "data analysis", "data cleaning", "تحليل البيانات"],
+      "questions": [
+        {
+          "id": "pandas_q1",
+          "difficulty": "basic",
+          "question_ar": "ما هو DataFrame في Pandas؟",
+          "question_en": "What is a DataFrame in Pandas?",
+          "options": [
+            {"id": "a", "ar": "بنية بيانات جدولية تحتوي صفوفاً وأعمدة", "en": "A tabular data structure with rows and columns"},
+            {"id": "b", "ar": "نوع من Docker container", "en": "A type of Docker container"},
+            {"id": "c", "ar": "خادم ويب", "en": "A web server"},
+            {"id": "d", "ar": "أمر Git", "en": "A Git command"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "DataFrame يمثل البيانات بشكل جدولي مشابه لجدول بيانات.",
+          "explanation_en": "A DataFrame represents data in a spreadsheet-like table."
+        },
+        {
+          "id": "pandas_q2",
+          "difficulty": "basic",
+          "question_ar": "أي method تساعد على اكتشاف القيم الناقصة؟",
+          "question_en": "Which method helps identify missing values?",
+          "options": [
+            {"id": "a", "ar": "isna()", "en": "isna()"},
+            {"id": "b", "ar": "deploy()", "en": "deploy()"},
+            {"id": "c", "ar": "commit()", "en": "commit()"},
+            {"id": "d", "ar": "route()", "en": "route()"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "isna() تعيد قيماً منطقية توضّح أماكن البيانات الناقصة.",
+          "explanation_en": "isna() returns Boolean values indicating where data is missing."
+        },
+        {
+          "id": "pandas_q3",
+          "difficulty": "basic",
+          "question_ar": "متى نستخدم groupby()؟",
+          "question_en": "When is groupby() useful?",
+          "options": [
+            {"id": "a", "ar": "عند تقسيم البيانات إلى مجموعات وحساب نتائج لكل مجموعة", "en": "When splitting data into groups and calculating results for each group"},
+            {"id": "b", "ar": "عند نشر الموقع", "en": "When deploying a website"},
+            {"id": "c", "ar": "عند إنشاء Git branch", "en": "When creating a Git branch"},
+            {"id": "d", "ar": "عند تثبيت نظام تشغيل", "en": "When installing an operating system"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "groupby() مناسبة للتجميع مثل حساب متوسط الراتب لكل موقع.",
+          "explanation_en": "groupby() supports aggregation, such as average salary by location."
+        }
+      ]
+    },
+    {
+      "skill": "Machine Learning",
+      "aliases": ["machine learning", "ml", "scikit-learn", "sklearn", "تعلم الآلة"],
+      "questions": [
+        {
+          "id": "ml_q1",
+          "difficulty": "basic",
+          "question_ar": "لماذا نقسم البيانات إلى train وtest؟",
+          "question_en": "Why do we split data into train and test sets?",
+          "options": [
+            {"id": "a", "ar": "لتقييم النموذج على بيانات لم يتدرب عليها", "en": "To evaluate the model on data it did not train on"},
+            {"id": "b", "ar": "لزيادة حجم الشاشة", "en": "To increase screen size"},
+            {"id": "c", "ar": "لحذف البيانات الناقصة دائماً", "en": "To always delete missing data"},
+            {"id": "d", "ar": "لنشر التطبيق فقط", "en": "Only to deploy the application"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "مجموعة test تقيس قدرة النموذج على التعميم على أمثلة غير مرئية أثناء التدريب.",
+          "explanation_en": "The test set measures how well the model generalizes to unseen examples."
+        },
+        {
+          "id": "ml_q2",
+          "difficulty": "basic",
+          "question_ar": "ما معنى overfitting؟",
+          "question_en": "What does overfitting mean?",
+          "options": [
+            {"id": "a", "ar": "النموذج ممتاز على التدريب لكنه ضعيف على بيانات جديدة", "en": "The model performs very well on training data but poorly on new data"},
+            {"id": "b", "ar": "النموذج لم يتم تشغيله", "en": "The model was never run"},
+            {"id": "c", "ar": "قاعدة البيانات فارغة", "en": "The database is empty"},
+            {"id": "d", "ar": "الواجهة تستخدم RTL", "en": "The interface uses RTL"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "Overfitting يعني أن النموذج حفظ تفاصيل التدريب ولم يعمم جيداً.",
+          "explanation_en": "Overfitting means the model learned the training details but failed to generalize well."
+        },
+        {
+          "id": "ml_q3",
+          "difficulty": "basic",
+          "question_ar": "لماذا نقارن النموذج مع baseline؟",
+          "question_en": "Why compare a model with a baseline?",
+          "options": [
+            {"id": "a", "ar": "لنعرف هل النموذج يقدم تحسناً حقيقياً على حل بسيط", "en": "To determine whether the model genuinely improves on a simple solution"},
+            {"id": "b", "ar": "لتغيير لغة Python", "en": "To change the Python language"},
+            {"id": "c", "ar": "لإخفاء النتائج", "en": "To hide the results"},
+            {"id": "d", "ar": "لإلغاء test set", "en": "To remove the test set"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "الـbaseline يعطي نقطة مرجعية بسيطة لمعرفة قيمة النموذج الفعلية.",
+          "explanation_en": "A baseline provides a simple reference point for judging the model's real value."
+        }
+      ]
+    },
+    {
+      "skill": "Cloud Deployment",
+      "aliases": ["deployment", "deploy", "cloud", "render", "hosting", "النشر السحابي"],
+      "questions": [
+        {
+          "id": "deployment_q1",
+          "difficulty": "basic",
+          "question_ar": "أين يجب حفظ API key عند نشر التطبيق؟",
+          "question_en": "Where should an API key be stored when deploying an application?",
+          "options": [
+            {"id": "a", "ar": "في Environment Variable أو secret manager", "en": "In an environment variable or secret manager"},
+            {"id": "b", "ar": "مكتوباً داخل README العام", "en": "Written in the public README"},
+            {"id": "c", "ar": "داخل اسم المستودع", "en": "Inside the repository name"},
+            {"id": "d", "ar": "داخل screenshot", "en": "Inside a screenshot"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "الأسرار لا يجب أن تُحفظ في الكود أو المستودع العام.",
+          "explanation_en": "Secrets should not be stored in source code or a public repository."
+        },
+        {
+          "id": "deployment_q2",
+          "difficulty": "basic",
+          "question_ar": "ما أول شيء مفيد تفحصه إذا فشل التطبيق عند التشغيل بعد النشر؟",
+          "question_en": "What is a useful first thing to inspect if the deployed app fails to start?",
+          "options": [
+            {"id": "a", "ar": "Deployment logs", "en": "Deployment logs"},
+            {"id": "b", "ar": "لون شعار الموقع", "en": "The logo color"},
+            {"id": "c", "ar": "اسم مستخدم GitHub", "en": "The GitHub username"},
+            {"id": "d", "ar": "حجم شاشة الهاتف", "en": "The phone screen size"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "السجلات تعرض أخطاء التثبيت أو أمر التشغيل أو إعدادات البيئة.",
+          "explanation_en": "Logs reveal dependency, start-command, and environment configuration errors."
+        },
+        {
+          "id": "deployment_q3",
+          "difficulty": "basic",
+          "question_ar": "ما الدليل الأفضل أن المشروع منشور ويمكن لصاحب العمل تجربته؟",
+          "question_en": "What is the best evidence that an employer can try the deployed project?",
+          "options": [
+            {"id": "a", "ar": "رابط عام يعمل مع رابط المستودع", "en": "A working public URL together with the repository link"},
+            {"id": "b", "ar": "صورة للكود فقط", "en": "Only a screenshot of the code"},
+            {"id": "c", "ar": "اسم المشروع دون رابط", "en": "The project name without a link"},
+            {"id": "d", "ar": "ملف فارغ", "en": "An empty file"}
+          ],
+          "correct_option_id": "a",
+          "explanation_ar": "الرابط العام العامل يسمح بتجربة المشروع، والمستودع يوضح طريقة بنائه.",
+          "explanation_en": "A working public URL enables hands-on use, while the repository shows how it was built."
+        }
+      ]
+    }
+  ],
+  "fallback": {
+    "ar": "لا يوجد اختبار جاهز لهذه المهارة في نسخة الديمو.",
+    "en": "No assessment is available for this skill in the demo."
+  }
+}

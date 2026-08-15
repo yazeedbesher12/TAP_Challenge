@@ -1,0 +1,230 @@
+{
+  "version": "1.0",
+  "type": "manual_demo_and_qa",
+  "project": "TAP Career Companion",
+  "purpose_ar": "سيناريوهات ثابتة لفحص المسار الكامل وتجهيز عرض الديمو النهائي.",
+  "purpose_en": "Deterministic scenarios for full-flow QA and the final demo presentation.",
+  "usage_rules": {
+    "runtime_data_source": false,
+    "modify_application_behavior": false,
+    "persist_demo_results": false,
+    "external_api_required": false,
+    "llm_required": false,
+    "database_required": false
+  },
+  "protected_files": [
+    "tap_career_companion_qa.json",
+    "data/jobs.json",
+    "data/demo_user_profile.json",
+    "data/learning_resources.json",
+    "data/skill_assessment_questions.json",
+    "data/readiness_rules.json"
+  ],
+  "scenarios": [
+    {
+      "id": "demo_ar_full_flow",
+      "priority": 1,
+      "name_ar": "المسار العربي الكامل",
+      "name_en": "Complete Arabic Flow",
+      "language": "ar",
+      "starting_message": "بدي وظيفة Python Backend Developer مناسبة لمهاراتي",
+      "objective_ar": "عرض رحلة المستخدم من طلب الوظيفة حتى نتيجة الجاهزية ورابط الفرصة.",
+      "objective_en": "Demonstrate the journey from a job request to readiness and the opportunity link.",
+      "operator_steps": [
+        {
+          "step": 1,
+          "action": "send_starting_message",
+          "expected": "A relevant or closely related job is displayed."
+        },
+        {
+          "step": 2,
+          "action": "open_job_details",
+          "expected": "Match score, matched skills, and missing required skills are visible."
+        },
+        {
+          "step": 3,
+          "action": "open_learning_roadmap",
+          "expected": "At most two roadmaps for missing required skills are displayed."
+        },
+        {
+          "step": 4,
+          "action": "start_skill_assessment",
+          "answer_strategy": "answer_all_correctly",
+          "expected": "The assessment result passes and explanations appear only after submission."
+        },
+        {
+          "step": 5,
+          "action": "view_final_readiness",
+          "expected": "A deterministic readiness score, status, strengths, gaps, action, and disclaimer are displayed."
+        },
+        {
+          "step": 6,
+          "action": "click_job_link",
+          "expected": "The configured demo job URL opens only after the click."
+        }
+      ],
+      "expected_ui": [
+        "Arabic content uses RTL presentation",
+        "Job result appears inside the existing chat flow",
+        "Learning roadmap appears without a new page",
+        "Assessment appears without exposing answers before submission",
+        "Final readiness card appears in the same flow"
+      ],
+      "acceptable_final_statuses": [
+        "ready_to_apply",
+        "almost_ready"
+      ],
+      "must_not_happen": [
+        "No Ollama or model startup",
+        "No external API request",
+        "No JSON file mutation",
+        "No duplicate Streamlit widget key error",
+        "No automatic opening of the job URL"
+      ]
+    },
+    {
+      "id": "demo_failed_skill_gate",
+      "priority": 2,
+      "name_ar": "فشل مهارة مطلوبة",
+      "name_en": "Failed Required-Skill Gate",
+      "language": "ar",
+      "starting_message": "اعرضلي وظيفة Backend Developer بتطلب Docker",
+      "objective_ar": "إثبات أن الدرجة المرتفعة لا تعطي جاهز للتقديم عند فشل اختبار مهارة مطلوبة.",
+      "objective_en": "Verify that a high score cannot produce Ready to Apply after failing a required-skill assessment.",
+      "operator_steps": [
+        {
+          "step": 1,
+          "action": "send_starting_message",
+          "expected": "A backend-related job containing a required skill gap is displayed."
+        },
+        {
+          "step": 2,
+          "action": "start_skill_assessment",
+          "answer_strategy": "answer_exactly_one_of_three_correctly",
+          "expected": "The tested required skill receives Needs Practice."
+        },
+        {
+          "step": 3,
+          "action": "view_final_readiness",
+          "expected": "The final status is capped and cannot be ready_to_apply."
+        }
+      ],
+      "expected_gate": "failed_required_skill_caps_readiness",
+      "forbidden_final_statuses": [
+        "ready_to_apply"
+      ],
+      "must_not_happen": [
+        "No passing result for one correct answer out of three",
+        "No professional-certification claim",
+        "No user-profile JSON update"
+      ]
+    },
+    {
+      "id": "demo_en_full_flow",
+      "priority": 3,
+      "name_ar": "فحص اللغة الإنجليزية",
+      "name_en": "English Flow Check",
+      "language": "en",
+      "starting_message": "Show me a Python developer job that matches my skills",
+      "objective_ar": "التأكد أن نفس المسار يعمل بالإنجليزية واتجاه LTR.",
+      "objective_en": "Verify that the same job flow works in English with LTR presentation.",
+      "operator_steps": [
+        {
+          "step": 1,
+          "action": "send_starting_message",
+          "expected": "English job results and match details are displayed."
+        },
+        {
+          "step": 2,
+          "action": "open_learning_roadmap",
+          "expected": "English roadmap labels and instructions are displayed."
+        },
+        {
+          "step": 3,
+          "action": "start_skill_assessment",
+          "answer_strategy": "answer_all_correctly",
+          "expected": "English questions, results, and explanations are displayed."
+        },
+        {
+          "step": 4,
+          "action": "view_final_readiness",
+          "expected": "English readiness labels, next action, and disclaimer are displayed."
+        }
+      ],
+      "expected_ui": [
+        "English content uses LTR presentation",
+        "No Arabic label replaces an available English label",
+        "The score calculation matches the Arabic flow rules"
+      ],
+      "must_not_happen": [
+        "No reversed English layout",
+        "No missing translation crash",
+        "No different scoring formula based on language"
+      ]
+    },
+    {
+      "id": "demo_clarification_fallback",
+      "priority": 4,
+      "name_ar": "طلب وظيفة غير محدد",
+      "name_en": "Unclear Job Request",
+      "language": "ar",
+      "starting_message": "بدي شغل",
+      "objective_ar": "التأكد أن الطلب غير المحدد ينتج سؤال توضيحي قصير ولا يستدعي Model.",
+      "objective_en": "Verify that an unclear request produces a focused clarification without a model call.",
+      "operator_steps": [
+        {
+          "step": 1,
+          "action": "send_starting_message",
+          "expected": "A short clarification asks for target role, experience level, or specific problem."
+        }
+      ],
+      "expected_ui": [
+        "The clarification is concise",
+        "Arabic presentation uses RTL",
+        "No empty job or readiness card appears"
+      ],
+      "must_not_happen": [
+        "No invented job result",
+        "No LLM or Ollama call",
+        "No application crash"
+      ]
+    }
+  ],
+  "global_checks": {
+    "data_integrity": [
+      "All JSON files load successfully",
+      "Protected JSON files remain byte-for-byte unchanged during QA",
+      "All referenced question answers and readiness-rule references are valid"
+    ],
+    "performance": [
+      "Known knowledge-base answers are returned in under one second on the target machine",
+      "Job matching does not perform network requests",
+      "No model is initialized during application startup or chat"
+    ],
+    "streamlit": [
+      "Application starts in headless mode",
+      "No duplicate widget keys",
+      "Assessment result survives normal Streamlit reruns in the current session",
+      "Changing the selected job clears or isolates stale job-specific assessment results"
+    ],
+    "regression": [
+      "Existing FastMatcher behavior remains unchanged",
+      "Existing safety boundaries remain active",
+      "Remember me remains disabled by default",
+      "Quick Actions remain removed"
+    ]
+  },
+  "demo_order": [
+    "demo_ar_full_flow",
+    "demo_failed_skill_gate",
+    "demo_en_full_flow",
+    "demo_clarification_fallback"
+  ],
+  "presentation_notes": {
+    "recommended_live_scenario": "demo_ar_full_flow",
+    "backup_scenario": "demo_failed_skill_gate",
+    "target_duration_minutes": 5,
+    "closing_message_ar": "TAP لا يعرض الوظيفة فقط؛ بل يوضح مدى مناسبتها، يكشف الفجوة، يقترح طريقاً عملياً، ويتحقق من الجاهزية قبل التقديم.",
+    "closing_message_en": "TAP does more than list a job: it explains the fit, identifies the gap, recommends a practical path, and checks readiness before applying."
+  }
+}
