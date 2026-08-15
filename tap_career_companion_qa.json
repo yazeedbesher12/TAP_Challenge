@@ -1,0 +1,1796 @@
+{
+  "metadata": {
+    "name": "TAP Bilingual Career Companion Knowledge Base",
+    "version": "1.0.0",
+    "created_at": "2026-08-15",
+    "purpose": "A retrieval-ready bilingual knowledge base for a local MENA career guidance chatbot.",
+    "languages": [
+      "Arabic",
+      "English",
+      "Arabic-English code-switching"
+    ],
+    "target_users": [
+      "Final-year students",
+      "Recent graduates",
+      "Early-career professionals",
+      "Career switchers",
+      "Palestinian and wider MENA job seekers"
+    ],
+    "recommended_use": "Semantic retrieval plus a local instruction model. Retrieve the most relevant items, then generate a personalized response using the user's profile and conversation history.",
+    "not_recommended_use": "Do not treat this small file as enough data to fine-tune a language model from scratch.",
+    "primary_reference": "TAP_Challenge_Brief.pdf",
+    "public_reference_urls": [
+      "https://www.tapcareers.io/for-jobseekers",
+      "https://www.tapcareers.io/for-employers"
+    ]
+  },
+  "assistant_policy": {
+    "identity_ar": "أنا مساعد مهني ثنائي اللغة للباحثين عن عمل في فلسطين ومنطقة الشرق الأوسط وشمال أفريقيا. أقدم خطوات عملية ومخصصة، ولا أضمن الحصول على وظيفة.",
+    "identity_en": "I am a bilingual career companion for job seekers in Palestine and the wider MENA region. I provide practical, personalized steps and never guarantee employment.",
+    "language_behavior": [
+      "Answer mainly in the language used by the user.",
+      "If the user mixes Arabic and English, respond naturally with the same style while keeping key career terms clear.",
+      "Do not translate technical terms that are clearer in English, such as CV, LinkedIn, ATS, Portfolio, Recruiter, and Mock Interview.",
+      "Keep Arabic responses compatible with right-to-left display."
+    ],
+    "personalization_rules": [
+      "Use known profile fields before asking the user to repeat information.",
+      "Ask no more than three focused follow-up questions at one time.",
+      "Adapt advice to experience level, target role, location, language level, work preference, and available weekly time.",
+      "End career-guidance responses with one concrete next step."
+    ],
+    "grounding_rules": [
+      "Use retrieved knowledge and user-provided facts; do not invent vacancies, salaries, companies, deadlines, or TAP policies.",
+      "Clearly label estimates and examples.",
+      "If current market or legal information is needed and no verified source is available, say that it must be checked.",
+      "Never promise that TAP or any employer will accept or hire the user."
+    ],
+    "privacy_rules": [
+      "Collect only information needed for career guidance.",
+      "Do not ask for passwords, national ID numbers, bank details, or private account access.",
+      "Ask permission before storing a CV, contact details, salary, disability information, or sensitive personal history.",
+      "Allow the user to continue without saving personal information."
+    ],
+    "safety_rules": [
+      "Stay within career guidance and professional development.",
+      "For legal, immigration, tax, medical, or mental-health questions, provide a brief boundary and suggest an appropriate qualified source.",
+      "If a user expresses immediate danger or self-harm intent, encourage urgent contact with local emergency services or a trusted person and do not continue normal career coaching.",
+      "Treat the user as a capable professional and never use patronizing language."
+    ]
+  },
+  "items": [
+    {
+      "id": "onboarding_001",
+      "category": "onboarding",
+      "intent": "start_career_guidance",
+      "question_variants": [
+        "من وين أبلش أدور على شغل؟",
+        "أنا خريج جديد ومش عارف أبدأ من وين",
+        "How do I start my job search?",
+        "I need a job بس مش عارف شو أول خطوة"
+      ],
+      "context_needed": [
+        "education_or_current_role",
+        "target_role",
+        "experience_level",
+        "location",
+        "preferred_work_mode"
+      ],
+      "follow_up_questions_ar": [
+        "شو تخصصك أو خبرتك الحالية؟",
+        "أي نوع وظيفة مستهدف: محلية، Remote، ولا الاثنين؟",
+        "هل عندك CV وLinkedIn ومشاريع جاهزة؟"
+      ],
+      "follow_up_questions_en": [
+        "What is your degree or current experience?",
+        "Are you targeting local, remote, or both types of roles?",
+        "Do you already have a CV, LinkedIn profile, and relevant projects?"
+      ],
+      "answer_core_ar": "البداية الصح مش إرسال طلبات عشوائية. أولًا نحدد دورًا أو دورين مناسبين، ثم نجهز دليلًا على مهاراتك، وبعدها نخصص CV وLinkedIn ونبدأ تقديمًا منتظمًا مع Networking.",
+      "answer_core_en": "The right starting point is not random applications. First choose one or two realistic target roles, build evidence of your skills, prepare a focused CV and LinkedIn profile, then combine consistent applications with networking.",
+      "action_steps_ar": [
+        "اكتب اسم دورين مستهدفين فقط.",
+        "اجمع ثلاثة إعلانات حقيقية لكل دور واستخرج المهارات المتكررة.",
+        "حدد أقوى مشروع أو تجربة تثبت كل مهارة أساسية."
+      ],
+      "action_steps_en": [
+        "Write down only two target roles.",
+        "Collect three real job descriptions for each role and identify repeated skills.",
+        "Choose your strongest project or experience that proves each key skill."
+      ],
+      "tags": ["beginner", "job-search", "planning", "mixed-language"]
+    },
+    {
+      "id": "onboarding_002",
+      "category": "onboarding",
+      "intent": "build_user_profile",
+      "question_variants": [
+        "شو المعلومات اللي بدك إياها عشان تساعدني؟",
+        "What do you need to know about me?",
+        "كيف رح تخصص النصيحة إلي؟"
+      ],
+      "context_needed": [],
+      "follow_up_questions_ar": [],
+      "follow_up_questions_en": [],
+      "answer_core_ar": "يكفيني Profile مهني بسيط: تخصصك، مكانك، مستوى خبرتك، الأدوار المستهدفة، أهم المهارات والمشاريع، مستوى الإنجليزية، نوع العمل المفضل، والوقت المتاح أسبوعيًا. لا أحتاج كلمة مرور أو رقم هوية أو بيانات بنكية.",
+      "answer_core_en": "A simple career profile is enough: education, location, experience level, target roles, key skills and projects, English level, preferred work mode, and weekly availability. I do not need passwords, identity numbers, or banking information.",
+      "action_steps_ar": [
+        "شارك فقط المعلومات التي ترتاح لحفظها.",
+        "ابدأ بالتخصص والدور المستهدف ومستوى الخبرة."
+      ],
+      "action_steps_en": [
+        "Share only the information you are comfortable storing.",
+        "Start with your field, target role, and experience level."
+      ],
+      "tags": ["profile", "personalization", "privacy"]
+    },
+    {
+      "id": "career_decision_001",
+      "category": "career_decision",
+      "intent": "career_switch",
+      "question_variants": [
+        "درست محاسبة بس بحب التصميم، هل تأخرت أغير مجالي؟",
+        "I studied accounting but I love design. Is it too late to switch?",
+        "بدي أعمل career shift بس خايف أضيع شهادتي"
+      ],
+      "context_needed": [
+        "current_field",
+        "target_field",
+        "existing_transferable_skills",
+        "weekly_availability",
+        "financial_constraints"
+      ],
+      "follow_up_questions_ar": [
+        "أي نوع تصميم تقصد: UI/UX، Graphic Design، ولا شيء آخر؟",
+        "شو عملت فعليًا بالمجال حتى الآن؟",
+        "كم ساعة أسبوعيًا تقدر تخصص للانتقال؟"
+      ],
+      "follow_up_questions_en": [
+        "Which design path do you mean: UI/UX, graphic design, or something else?",
+        "What have you already created in that field?",
+        "How many hours per week can you invest in the transition?"
+      ],
+      "answer_core_ar": "مش متأخر، لكن الانتقال لازم يكون تدريجيًا ومثبتًا بالعمل. خبرتك السابقة مش ضائعة؛ ممكن تتحول لميزة إذا استهدفت مجالًا يجمع فهم الأعمال مع التصميم. القرار النهائي يعتمد على تجربة قصيرة حقيقية، مش على الشعور وحده.",
+      "answer_core_en": "It is not too late, but the switch should be gradual and supported by evidence. Your previous field is not wasted; it can become an advantage in roles that combine business understanding with design. Test the new path through a real short project before making a full commitment.",
+      "action_steps_ar": [
+        "اختر مسار تصميم واحد لمدة 30 يومًا.",
+        "نفذ مشروعًا صغيرًا مرتبطًا بمجالك السابق.",
+        "اعرضه على شخصين يعملان بالمجال واطلب Feedback محددًا."
+      ],
+      "action_steps_en": [
+        "Choose one design path for a 30-day test.",
+        "Build a small project connected to your previous field.",
+        "Show it to two professionals and ask for specific feedback."
+      ],
+      "tags": ["career-switch", "design", "decision", "TAP-use-case"]
+    },
+    {
+      "id": "career_decision_002",
+      "category": "career_decision",
+      "intent": "choose_between_roles",
+      "question_variants": [
+        "أختار AI ولا Full Stack؟",
+        "Should I focus on data science or software development?",
+        "محتار بين مجالين، كيف أقرر؟"
+      ],
+      "context_needed": [
+        "skills",
+        "projects",
+        "preferred_tasks",
+        "target_market",
+        "time_to_employment"
+      ],
+      "follow_up_questions_ar": [
+        "أي نوع Tasks تستمتع فيه أكثر؟",
+        "أي مجال عندك فيه مشروع أقوى الآن؟",
+        "هل أولويتك وظيفة أسرع أم تخصص أدق على المدى الطويل؟"
+      ],
+      "follow_up_questions_en": [
+        "Which type of tasks do you enjoy more?",
+        "In which path do you already have stronger evidence?",
+        "Is your priority faster employment or deeper long-term specialization?"
+      ],
+      "answer_core_ar": "لا تختار حسب اسم المجال فقط. قيّم كل مسار على أربعة أشياء: اهتمامك بالمهام اليومية، مستواك الحالي، عدد الفرص الواقعية التي تجدها، والوقت المطلوب لتصبح جاهزًا للمقابلة. ممكن تختار Primary Role ومسارًا ثانيًا داعمًا بدل تشتيت نفسك بالتساوي.",
+      "answer_core_en": "Do not choose based on the field name alone. Compare the daily tasks, your current evidence, the real openings you can find, and the time needed to become interview-ready. Pick one primary target and keep the second as a supporting skill set.",
+      "action_steps_ar": [
+        "اجمع عشرة إعلانات لكل مسار.",
+        "اعمل جدول Gap للمهارات المتكررة.",
+        "اختر المسار الذي تقدر تثبت جاهزيتك له خلال 6 إلى 8 أسابيع."
+      ],
+      "action_steps_en": [
+        "Collect ten job descriptions for each path.",
+        "Create a gap table for repeated skills.",
+        "Choose the path for which you can prove readiness within six to eight weeks."
+      ],
+      "tags": ["role-selection", "AI", "software", "decision-matrix"]
+    },
+    {
+      "id": "career_decision_003",
+      "category": "career_decision",
+      "intent": "local_vs_remote",
+      "question_variants": [
+        "أقبل وظيفة محلية ولا أستنى Remote؟",
+        "Should I take a local job or wait for a remote role?",
+        "local offer ولا أكمل أدور على international role؟"
+      ],
+      "context_needed": [
+        "local_offer_details",
+        "financial_need",
+        "career_goal",
+        "remote_readiness",
+        "risk_tolerance"
+      ],
+      "follow_up_questions_ar": [
+        "هل عندك عرض محلي فعلي وما تفاصيله؟",
+        "هل تحتاج دخلًا خلال فترة قريبة؟",
+        "هل الوظيفة المحلية تضيف خبرة قابلة للنقل لدور Remote لاحقًا؟"
+      ],
+      "follow_up_questions_en": [
+        "Do you have a real local offer and what are its details?",
+        "Do you need income soon?",
+        "Will the local role build transferable experience for a later remote role?"
+      ],
+      "answer_core_ar": "وجود وظيفة محلية جيدة لا يمنع هدف الـRemote. إذا كانت تضيف خبرة حقيقية ودخلًا مناسبًا ولا تستهلك كل طاقتك، قد تكون Bridge ممتازة. المقارنة لازم تشمل التعلم، الاستقرار، الراتب الصافي، ساعات العمل، العقد، وفرصة النمو، مش الراتب وحده.",
+      "answer_core_en": "A good local role does not cancel the remote goal. If it provides real experience, acceptable income, and room to grow, it can be an effective bridge. Compare learning, stability, net pay, hours, contract terms, and growth rather than salary alone.",
+      "action_steps_ar": [
+        "قيّم الخيارين من 1 إلى 5 على التعلم والاستقرار والدخل والنمو.",
+        "حدد شرطًا واضحًا لقبول العرض أو رفضه.",
+        "إذا قبلت المحلي، خصص وقتًا أسبوعيًا ثابتًا لبناء مسار الـRemote."
+      ],
+      "action_steps_en": [
+        "Score both options from one to five on learning, stability, income, and growth.",
+        "Define one clear acceptance threshold.",
+        "If you accept locally, reserve fixed weekly time for your remote path."
+      ],
+      "tags": ["remote", "local-job", "offer-decision", "MENA"]
+    },
+    {
+      "id": "career_plan_001",
+      "category": "career_planning",
+      "intent": "no_experience_plan",
+      "question_variants": [
+        "كل الوظائف بدها خبرة وأنا ما عندي خبرة",
+        "How can I get experience when every job requires experience?",
+        "أنا fresh graduate، شو أعمل؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "projects",
+        "internships",
+        "volunteering",
+        "available_time"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور المستهدف؟",
+        "هل عندك مشروع جامعي أو شخصي قريب من هذا الدور؟",
+        "هل تقدر تنفذ مشروعًا حقيقيًا لجهة صغيرة أو مجتمع تقني؟"
+      ],
+      "follow_up_questions_en": [
+        "What role are you targeting?",
+        "Do you have a university or personal project related to it?",
+        "Can you complete a real project for a small organization or technical community?"
+      ],
+      "answer_core_ar": "للـEntry Level، الخبرة لا تعني دائمًا وظيفة رسمية. مشروع قوي، Internship، Freelance صغير، مساهمة Open Source، أو عمل تطوعي بنتيجة واضحة ممكن يكون Evidence مقنعًا. المهم أن تشرح المشكلة، دورك، الأدوات، والنتيجة.",
+      "answer_core_en": "For entry-level roles, experience does not always mean formal employment. A strong project, internship, small freelance assignment, open-source contribution, or outcome-based volunteer work can provide credible evidence. Explain the problem, your role, tools, and result.",
+      "action_steps_ar": [
+        "اختر متطلبًا متكررًا من إعلانات الوظائف.",
+        "ابنِ مشروعًا صغيرًا يثبت هذا المتطلب خلال أسبوعين.",
+        "انشر المشروع مع README ونتيجة قابلة للعرض."
+      ],
+      "action_steps_en": [
+        "Choose one repeated requirement from real job descriptions.",
+        "Build a small project proving it within two weeks.",
+        "Publish it with a clear README and demonstrable outcome."
+      ],
+      "tags": ["fresh-graduate", "experience", "portfolio", "entry-level"]
+    },
+    {
+      "id": "career_plan_002",
+      "category": "career_planning",
+      "intent": "thirty_day_plan",
+      "question_variants": [
+        "اعطيني خطة شهر عشان أبلش أقدم",
+        "Can you make me a 30-day job-search plan?",
+        "بدي practical plan مش حكي عام"
+      ],
+      "context_needed": [
+        "target_role",
+        "current_assets",
+        "skill_gaps",
+        "weekly_availability"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور المستهدف؟",
+        "كم ساعة أسبوعيًا عندك؟",
+        "شو الجاهز حاليًا: CV، LinkedIn، Portfolio؟"
+      ],
+      "follow_up_questions_en": [
+        "What is your target role?",
+        "How many hours per week are available?",
+        "What is already ready: CV, LinkedIn, or portfolio?"
+      ],
+      "answer_core_ar": "خطة الشهر لازم تجمع بين تجهيز المواد والتقديم وبناء العلاقات، مش تنتظر حتى يصبح كل شيء مثاليًا. نبدأ التقديم من الأسبوع الأول ونراجع النتائج أسبوعيًا.",
+      "answer_core_en": "A useful 30-day plan combines asset improvement, applications, and networking instead of waiting for perfection. Start applying in week one and review results every week.",
+      "action_steps_ar": [
+        "الأسبوع 1: حدد الدور، حلل 10 إعلانات، وعدل CV وLinkedIn.",
+        "الأسبوع 2: حسّن مشروعًا واحدًا، قدم طلبات مخصصة، وابدأ Outreach.",
+        "الأسبوع 3: نفذ Mock Interviews وتابع الطلبات والرسائل.",
+        "الأسبوع 4: راجع الأرقام، أصلح أضعف مرحلة، وكرر ما نجح."
+      ],
+      "action_steps_en": [
+        "Week 1: choose the role, analyze ten postings, and update the CV and LinkedIn.",
+        "Week 2: improve one project, submit tailored applications, and start outreach.",
+        "Week 3: run mock interviews and follow up on applications and messages.",
+        "Week 4: review the numbers, fix the weakest stage, and repeat what worked."
+      ],
+      "tags": ["30-day-plan", "execution", "applications", "networking"]
+    },
+    {
+      "id": "cv_001",
+      "category": "cv",
+      "intent": "cv_structure",
+      "question_variants": [
+        "شو لازم أحط بالـCV؟",
+        "What sections should my CV include?",
+        "كيف أرتب الresume تبعتي؟"
+      ],
+      "context_needed": [
+        "experience_level",
+        "target_role",
+        "education",
+        "projects"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور المستهدف؟",
+        "هل عندك خبرة عملية أم أغلب خبرتك مشاريع؟"
+      ],
+      "follow_up_questions_en": [
+        "What role are you targeting?",
+        "Do you have formal experience or mainly projects?"
+      ],
+      "answer_core_ar": "لخريج أو Junior، الترتيب العملي غالبًا: الاسم ووسائل التواصل والروابط، Summary قصير اختياري، Skills مرتبطة بالدور، Experience، Projects، Education، ثم شهادات أو نشاطات مفيدة. احذف المعلومات الشخصية غير اللازمة مثل الصورة والحالة الاجتماعية إلا إذا كان السياق المحلي يتطلبها بوضوح.",
+      "answer_core_en": "For a graduate or junior candidate, a practical order is contact details and links, an optional short summary, role-relevant skills, experience, projects, education, then useful certifications or activities. Remove unnecessary personal information unless a specific local context clearly requires it.",
+      "action_steps_ar": [
+        "خلي كل قسم يخدم الوظيفة المستهدفة.",
+        "استخدم روابط قابلة للفتح لـLinkedIn وGitHub وPortfolio.",
+        "استهدف صفحة واحدة إذا خبرتك أقل من عدة سنوات."
+      ],
+      "action_steps_en": [
+        "Make every section support the target role.",
+        "Use working links for LinkedIn, GitHub, and the portfolio.",
+        "Aim for one page when you have limited experience."
+      ],
+      "tags": ["CV", "resume", "structure", "junior"]
+    },
+    {
+      "id": "cv_002",
+      "category": "cv",
+      "intent": "cv_without_formal_experience",
+      "question_variants": [
+        "ما عندي خبرة شو أكتب بالـCV؟",
+        "My CV is empty because I have never worked",
+        "كيف أعبي الCV بدون ما أكذب؟"
+      ],
+      "context_needed": [
+        "projects",
+        "coursework",
+        "volunteering",
+        "competitions",
+        "target_role"
+      ],
+      "follow_up_questions_ar": [
+        "شو أقوى مشروع عملته؟",
+        "هل شاركت بتدريب، Hackathon، نادي، بحث، أو عمل تطوعي؟"
+      ],
+      "follow_up_questions_en": [
+        "What is the strongest project you have completed?",
+        "Have you joined an internship, hackathon, club, research project, or volunteer activity?"
+      ],
+      "answer_core_ar": "لا تعبي الفراغ بمعلومات عامة ولا تختلق خبرة. حوّل المشاريع والتدريب والـHackathons والبحث والعمل التطوعي إلى Experience موصوف بنتائج. الشركة تريد Evidence على قدرتك، مش مسمى وظيفي فقط.",
+      "answer_core_en": "Do not fill the space with generic claims or invented experience. Present projects, internships, hackathons, research, and volunteer work as outcome-based evidence. Employers need proof of ability, not only a job title.",
+      "action_steps_ar": [
+        "اكتب لكل مشروع: المشكلة، دورك، التقنية، والنتيجة.",
+        "أضف رابط Demo أو GitHub إن أمكن.",
+        "احذف Soft Skills غير المثبتة بقصة أو نتيجة."
+      ],
+      "action_steps_en": [
+        "For each project, state the problem, your role, the technology, and the result.",
+        "Add a demo or GitHub link when possible.",
+        "Remove unproven soft-skill lists."
+      ],
+      "tags": ["CV", "no-experience", "projects", "honesty"]
+    },
+    {
+      "id": "cv_003",
+      "category": "cv",
+      "intent": "tailor_cv",
+      "question_variants": [
+        "لازم أغير الCV لكل وظيفة؟",
+        "Do I need a different CV for every application?",
+        "كيف أعمل tailoring للresume؟"
+      ],
+      "context_needed": [
+        "job_description",
+        "master_cv",
+        "target_role"
+      ],
+      "follow_up_questions_ar": [
+        "هل عندك نص إعلان الوظيفة؟",
+        "شو أقوى خبراتك المرتبطة بمتطلباته؟"
+      ],
+      "follow_up_questions_en": [
+        "Do you have the job description?",
+        "Which of your experiences match its main requirements?"
+      ],
+      "answer_core_ar": "مش لازم تعيد كتابة الـCV من الصفر، لكن لازم تخصص أعلى ثلث منه وترتيب المهارات والخبرات والكلمات المهمة. استخدم وصف الوظيفة لتحديد الأولويات، ولا تضف مهارة لا تملكها فقط لإرضاء ATS.",
+      "answer_core_en": "You do not need to rewrite the CV from scratch, but tailor the top third, skill order, experience bullets, and relevant terminology. Use the job description to prioritize evidence, and never claim a skill only to satisfy an ATS.",
+      "action_steps_ar": [
+        "استخرج أهم خمسة متطلبات من الإعلان.",
+        "اربط كل متطلب بدليل حقيقي عندك.",
+        "قدم الأدلة الأقوى في أعلى الصفحة."
+      ],
+      "action_steps_en": [
+        "Extract the five most important requirements.",
+        "Match each one to real evidence you have.",
+        "Move the strongest evidence toward the top."
+      ],
+      "tags": ["CV", "tailoring", "job-description", "ATS"]
+    },
+    {
+      "id": "cv_004",
+      "category": "cv",
+      "intent": "ats_optimization",
+      "question_variants": [
+        "كيف أخلي الCV مناسب للATS؟",
+        "How do I make my resume ATS-friendly?",
+        "الATS برفض الCV تبعتي؟"
+      ],
+      "context_needed": [
+        "cv_format",
+        "job_description",
+        "target_country"
+      ],
+      "follow_up_questions_ar": [
+        "هل الـCV فيه جداول أو أعمدة أو صور كثيرة؟",
+        "هل تستخدم نفس الكلمات المهنية الموجودة بالإعلان عندما تكون صحيحة؟"
+      ],
+      "follow_up_questions_en": [
+        "Does the CV use complex columns, tables, or graphics?",
+        "Do you use the job description's professional terms when they truthfully match your experience?"
+      ],
+      "answer_core_ar": "خلي التصميم بسيطًا، العناوين واضحة، والنص قابلًا للنسخ. تجنب الجداول المعقدة والأيقونات بدل الكلمات، واستخدم مصطلحات الإعلان بشكل طبيعي عندما تعكس خبرتك. الـATS مش سبب كل رفض؛ جودة المطابقة والدليل أهم.",
+      "answer_core_en": "Use a simple layout, clear headings, and selectable text. Avoid complex tables and icons that replace words, and use job-description terminology naturally when it matches your experience. The ATS is not the cause of every rejection; relevance and evidence matter more.",
+      "action_steps_ar": [
+        "احفظ نسخة PDF واضحة ونسخة DOCX عند الطلب.",
+        "جرّب نسخ النص من الملف وتأكد أن ترتيب الأقسام صحيح.",
+        "لا تحشو Keywords غير حقيقية."
+      ],
+      "action_steps_en": [
+        "Keep a clean PDF and a DOCX version when requested.",
+        "Copy the text out of the file and confirm that the reading order is correct.",
+        "Do not stuff false keywords."
+      ],
+      "tags": ["ATS", "CV", "format", "keywords"]
+    },
+    {
+      "id": "cv_005",
+      "category": "cv",
+      "intent": "write_project_bullets",
+      "question_variants": [
+        "كيف أكتب مشروعي بالـCV؟",
+        "How should I describe a project on my resume?",
+        "بدي bullet points قوية للمشروع"
+      ],
+      "context_needed": [
+        "project_problem",
+        "user_role",
+        "tools",
+        "measurable_result",
+        "team_size"
+      ],
+      "follow_up_questions_ar": [
+        "شو المشكلة التي حلها المشروع؟",
+        "شو عملت أنت تحديدًا؟",
+        "هل عندك رقم أو نتيجة أو Demo تثبت الأثر؟"
+      ],
+      "follow_up_questions_en": [
+        "What problem did the project solve?",
+        "What exactly did you personally build?",
+        "Do you have a metric, result, or demo that proves the outcome?"
+      ],
+      "answer_core_ar": "استخدم صيغة: فعل قوي + ما بنيته + التقنية + النتيجة. مثال: طورت نظام تصنيف باستخدام Python وX، ورفعت الدقة من A إلى B على Dataset محددة. لا تنسب لنفسك عمل الفريق كله.",
+      "answer_core_en": "Use this structure: strong action verb, what you built, the technology, and the result. For example: developed a classification system using Python and X, improving accuracy from A to B on a defined dataset. Do not claim the whole team's work as your own.",
+      "action_steps_ar": [
+        "اكتب نقطتين أو ثلاثًا لكل مشروع.",
+        "ابدأ بأقوى نتيجة بدل وصف المشروع العام.",
+        "وضح مساهمتك الشخصية إذا كان المشروع جماعيًا."
+      ],
+      "action_steps_en": [
+        "Use two or three bullets per project.",
+        "Lead with the strongest outcome instead of a generic description.",
+        "Clarify your contribution in team projects."
+      ],
+      "tags": ["CV", "projects", "achievement", "metrics"]
+    },
+    {
+      "id": "cv_006",
+      "category": "cv",
+      "intent": "explain_employment_gap",
+      "question_variants": [
+        "عندي gap بالCV بسبب الظروف، كيف أشرحها؟",
+        "How should I explain a career gap caused by displacement or family circumstances?",
+        "انقطعت فترة عن الشغل، هل هاض بخرب فرصي؟"
+      ],
+      "context_needed": [
+        "gap_length",
+        "desired_privacy_level",
+        "activities_during_gap",
+        "target_role"
+      ],
+      "follow_up_questions_ar": [
+        "كم طول الفترة؟",
+        "هل عملت تعلمًا أو مشروعًا أو مسؤوليات قابلة للذكر خلالها؟",
+        "كم تفصيل ترتاح لمشاركته؟"
+      ],
+      "follow_up_questions_en": [
+        "How long was the gap?",
+        "Did you complete learning, projects, or meaningful responsibilities during it?",
+        "How much detail are you comfortable sharing?"
+      ],
+      "answer_core_ar": "اشرح الفترة باختصار وصدق بدون كشف تفاصيل شخصية لا تريدها، ثم انتقل لما حافظت عليه أو تعلمته ولجاهزيتك الحالية. الظروف الصعبة ليست فشلًا مهنيًا، ولا تحتاج للاعتذار عنها.",
+      "answer_core_en": "Explain the period briefly and honestly without disclosing private details, then move to what you maintained or learned and your current readiness. Difficult circumstances are not a professional failure, and you do not need to apologize for them.",
+      "action_steps_ar": [
+        "جهز جوابًا من جملتين فقط.",
+        "اذكر نشاطًا حقيقيًا واحدًا إن وجد.",
+        "اختم بسبب جاهزيتك للدور الآن."
+      ],
+      "action_steps_en": [
+        "Prepare a two-sentence answer.",
+        "Mention one real activity from the period if applicable.",
+        "Finish with why you are ready for the role now."
+      ],
+      "tags": ["career-gap", "displacement", "privacy", "dignity", "MENA"]
+    },
+    {
+      "id": "linkedin_001",
+      "category": "linkedin",
+      "intent": "write_linkedin_headline",
+      "question_variants": [
+        "شو أكتب بالLinkedIn headline؟",
+        "Can you improve my LinkedIn headline?",
+        "بدي headline يجذب international recruiters"
+      ],
+      "context_needed": [
+        "target_role",
+        "top_skills",
+        "strongest_evidence",
+        "experience_level"
+      ],
+      "follow_up_questions_ar": [
+        "شو المسمى المستهدف؟",
+        "شو أقوى مهارتين أو نتيجة عندك؟"
+      ],
+      "follow_up_questions_en": [
+        "What is your target title?",
+        "What are your two strongest skills or outcomes?"
+      ],
+      "answer_core_ar": "الـHeadline لازم يوضح القيمة بسرعة، مش فقط أنك تبحث عن عمل. صيغة مناسبة: Target Role | Key Skills | Domain or Evidence. تجنب عبارات مثل Student at University وحدها أو Looking for Any Opportunity.",
+      "answer_core_en": "The headline should communicate value quickly, not only that you are seeking work. A useful formula is: Target Role | Key Skills | Domain or Evidence. Avoid using only Student at University or Looking for Any Opportunity.",
+      "action_steps_ar": [
+        "ابدأ بالمسمى الذي يبحث عنه الـRecruiter.",
+        "أضف مهارتين مطلوبتين فعليًا.",
+        "اختم بتخصص أو إنجاز يميزك."
+      ],
+      "action_steps_en": [
+        "Start with the title recruiters search for.",
+        "Add two genuinely relevant skills.",
+        "Finish with a domain or outcome that differentiates you."
+      ],
+      "tags": ["LinkedIn", "headline", "branding", "international"]
+    },
+    {
+      "id": "linkedin_002",
+      "category": "linkedin",
+      "intent": "write_linkedin_about",
+      "question_variants": [
+        "كيف أكتب About على LinkedIn؟",
+        "What should my LinkedIn About section say?",
+        "الAbout عندي generic، كيف أزبطه؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "experience_summary",
+        "projects",
+        "career_goal"
+      ],
+      "follow_up_questions_ar": [
+        "مين بدك يقرأ الـAbout وشو الدور المستهدف؟",
+        "شو مشروع أو نتيجة تثبت اهتمامك؟"
+      ],
+      "follow_up_questions_en": [
+        "Who should read the About section and what role are you targeting?",
+        "Which project or result best proves your direction?"
+      ],
+      "answer_core_ar": "اكتب الـAbout كقصة مهنية قصيرة: من أنت، ماذا تبني أو تحل، دليل واحد أو اثنان، وما نوع الفرص التي تستهدفها. خلي أول سطرين واضحين لأنهما يظهران قبل الضغط على See more.",
+      "answer_core_en": "Write the About section as a short professional story: who you are, what you build or solve, one or two pieces of evidence, and the opportunities you target. Make the first two lines strong because they appear before See more.",
+      "action_steps_ar": [
+        "اكتب 120 إلى 200 كلمة.",
+        "أضف كلمات تخصصك بدون حشو.",
+        "اختم بدعوة واضحة للتواصل حول نوع محدد من الفرص."
+      ],
+      "action_steps_en": [
+        "Write roughly 120 to 200 words.",
+        "Include role keywords naturally.",
+        "End with a clear invitation related to a specific opportunity type."
+      ],
+      "tags": ["LinkedIn", "about", "personal-brand", "profile"]
+    },
+    {
+      "id": "linkedin_003",
+      "category": "linkedin",
+      "intent": "linkedin_international_profile",
+      "question_variants": [
+        "كيف أخلي employers برا المنطقة ياخذوا LinkedIn تبعي بجدية؟",
+        "How can I make international employers take my LinkedIn seriously?",
+        "بدي profile مناسب للremote jobs"
+      ],
+      "context_needed": [
+        "profile_url_or_text",
+        "target_role",
+        "portfolio_links",
+        "English_level"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور والدول أو الأسواق المستهدفة؟",
+        "هل العنوان والـAbout والخبرات مكتوبة بإنجليزية واضحة؟",
+        "هل عندك Projects أو Featured links؟"
+      ],
+      "follow_up_questions_en": [
+        "Which role and markets are you targeting?",
+        "Are your headline, About section, and experience written in clear English?",
+        "Do you have projects or Featured links?"
+      ],
+      "answer_core_ar": "الشركة الدولية تحتاج أن تفهم خلال ثوانٍ: ماذا تعمل، ما مستوى خبرتك، ما الدليل، وهل أنت جاهز للـRemote. استخدم English واضحة، Location صادقة، روابط عملية، نتائج قابلة للقياس، ووضح Remote collaboration أو communication experience إن وجدت.",
+      "answer_core_en": "An international employer should understand within seconds what you do, your level, your evidence, and whether you are remote-ready. Use clear English, an accurate location, working links, measurable outcomes, and evidence of remote collaboration or communication when available.",
+      "action_steps_ar": [
+        "ثبت ثلاثة أعمال قوية في Featured.",
+        "راجع كل رابط من نافذة خاصة.",
+        "اطلب من شخص لا يعرفك أن يصف تخصصك بعد مشاهدة الملف عشر ثوانٍ."
+      ],
+      "action_steps_en": [
+        "Pin three strong pieces of work in Featured.",
+        "Test every link in a private browser window.",
+        "Ask someone who does not know you to identify your field after viewing the profile for ten seconds."
+      ],
+      "tags": ["LinkedIn", "remote", "international", "TAP-use-case"]
+    },
+    {
+      "id": "networking_001",
+      "category": "networking",
+      "intent": "first_outreach_message",
+      "question_variants": [
+        "شو أبعت لRecruiter على LinkedIn؟",
+        "Can you write a networking message?",
+        "بدي أحكي مع حدا بالشركة بس بدون ما أطلب وظيفة مباشرة"
+      ],
+      "context_needed": [
+        "recipient_role",
+        "target_company",
+        "shared_context",
+        "specific_question"
+      ],
+      "follow_up_questions_ar": [
+        "مين الشخص وليش اخترته؟",
+        "شو الشيء المحدد الذي تريد معرفته أو مناقشته؟"
+      ],
+      "follow_up_questions_en": [
+        "Who is the person and why did you choose them?",
+        "What specific thing do you want to learn or discuss?"
+      ],
+      "answer_core_ar": "أفضل رسالة قصيرة وشخصية: سبب حقيقي للتواصل، نقطة مشتركة أو ملاحظة محددة، وسؤال صغير يسهل الرد عليه. لا ترسل CV من أول رسالة ولا تكتب طلبًا عامًا طويلًا.",
+      "answer_core_en": "A strong message is short and personal: give a genuine reason for contacting them, mention a specific connection or observation, and ask one small question that is easy to answer. Do not attach a CV in the first message or send a long generic request.",
+      "action_steps_ar": [
+        "اكتب الرسالة في 60 إلى 90 كلمة.",
+        "اذكر شيئًا محددًا من خبرة الشخص أو الشركة.",
+        "اطلب نصيحة قصيرة أو 10 دقائق، وليس وظيفة مباشرة."
+      ],
+      "action_steps_en": [
+        "Keep the message between 60 and 90 words.",
+        "Mention something specific about the person or company.",
+        "Ask for brief advice or ten minutes, not a job directly."
+      ],
+      "tags": ["networking", "LinkedIn", "outreach", "recruiter"]
+    },
+    {
+      "id": "networking_002",
+      "category": "networking",
+      "intent": "build_network_without_connections",
+      "question_variants": [
+        "ما عندي واسطة أو علاقات، كيف ألاقي فرصة؟",
+        "I have no professional network. What can I do?",
+        "كيف أعمل networking من فلسطين؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "communities",
+        "alumni_access",
+        "comfort_with_outreach"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور المستهدف؟",
+        "هل عندك وصول لخريجين جامعتك أو مجتمعات تقنية أو Mentors؟"
+      ],
+      "follow_up_questions_en": [
+        "What role are you targeting?",
+        "Can you reach alumni, technical communities, or mentors?"
+      ],
+      "answer_core_ar": "Networking مش لازم تكون واسطة؛ هي بناء ثقة قبل وجود طلب. ابدأ بدائرة قريبة ثم توسع: خريجون، فعاليات، مجتمعات تقنية، Mentors، ومساهمون في مشاريع مرتبطة بمجالك. أعطِ قيمة أيضًا: شارك مشروعًا، ملخصًا مفيدًا، أو Feedback محترمًا.",
+      "answer_core_en": "Networking does not have to mean favoritism; it means building professional trust before asking for help. Start with alumni, events, technical communities, mentors, and contributors in your field. Give value too by sharing useful work, a concise insight, or thoughtful feedback.",
+      "action_steps_ar": [
+        "اختر خمسة أشخاص مناسبين، مش خمسين عشوائيًا.",
+        "تفاعل مع محتواهم بشكل حقيقي قبل الرسالة.",
+        "أرسل رسالتين مخصصتين كل يوم عمل لمدة أسبوعين."
+      ],
+      "action_steps_en": [
+        "Choose five relevant people instead of fifty random contacts.",
+        "Engage genuinely with their work before messaging.",
+        "Send two personalized messages per working day for two weeks."
+      ],
+      "tags": ["networking", "access", "Palestine", "MENA", "mentorship"]
+    },
+    {
+      "id": "job_search_001",
+      "category": "job_search",
+      "intent": "find_jobs",
+      "question_variants": [
+        "وين ألاقي وظائف مناسبة؟",
+        "Where should I search for remote or MENA jobs?",
+        "شو أحسن job boards إلي؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "location",
+        "preferred_work_mode",
+        "experience_level"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور والمستوى المستهدف؟",
+        "هل تبحث محليًا، إقليميًا، Remote، أم جميعها؟"
+      ],
+      "follow_up_questions_en": [
+        "What role and seniority level are you targeting?",
+        "Are you searching locally, regionally, remotely, or across all three?"
+      ],
+      "answer_core_ar": "لا تعتمد على منصة واحدة. استخدم خليطًا من LinkedIn وصفحات الشركات ومنصات محلية وإقليمية ومجتمعات تخصصية وإحالات. الأفضل هو البحث بأسماء مهارات ومهام قريبة، مش مسمى واحد فقط.",
+      "answer_core_en": "Do not rely on one platform. Combine LinkedIn, company career pages, local and regional boards, specialist communities, and referrals. Search for related skills and responsibilities, not only one exact title.",
+      "action_steps_ar": [
+        "أنشئ قائمة من 20 شركة مستهدفة.",
+        "فعّل Alerts لثلاث صيغ مختلفة للمسمى.",
+        "راجع صفحة الشركة مباشرة قبل التقديم."
+      ],
+      "action_steps_en": [
+        "Create a target list of twenty companies.",
+        "Set alerts for three variations of the role title.",
+        "Check the company's career page before applying."
+      ],
+      "tags": ["job-boards", "remote", "MENA", "company-list"]
+    },
+    {
+      "id": "job_search_002",
+      "category": "job_search",
+      "intent": "application_volume",
+      "question_variants": [
+        "كم وظيفة لازم أقدم بالأسبوع؟",
+        "How many applications should I send each week?",
+        "أركز على quantity ولا quality؟"
+      ],
+      "context_needed": [
+        "weekly_availability",
+        "target_role",
+        "current_response_rate",
+        "application_quality"
+      ],
+      "follow_up_questions_ar": [
+        "كم ساعة أسبوعيًا عندك؟",
+        "كم طلب قدمت وكم مقابلة حصلت؟"
+      ],
+      "follow_up_questions_en": [
+        "How many hours per week are available?",
+        "How many applications and interviews have you had so far?"
+      ],
+      "answer_core_ar": "ما في رقم سحري. الأفضل هدف أسبوعي تستطيع الحفاظ عليه مع تخصيص حقيقي، مثل 8 إلى 15 طلبًا قويًا للمبتدئ، مع Networking ومتابعة. هذا مثال وليس قاعدة؛ إذا لم تحصل على Screens بعد عدد معقول، افحص الاستهداف والـCV بدل زيادة الإرسال فقط.",
+      "answer_core_en": "There is no magic number. Set a sustainable weekly target with real tailoring, for example eight to fifteen strong applications for an early-career candidate, alongside networking and follow-up. This is an example, not a rule; if you get no screens after a meaningful sample, fix targeting and the CV instead of only increasing volume.",
+      "action_steps_ar": [
+        "سجل الطلبات والردود في Tracker.",
+        "قسّم وقتك بين البحث والتخصيص والـOutreach.",
+        "راجع معدل الوصول للمقابلات كل أسبوعين."
+      ],
+      "action_steps_en": [
+        "Track applications and responses.",
+        "Split time between sourcing, tailoring, and outreach.",
+        "Review the interview conversion rate every two weeks."
+      ],
+      "tags": ["applications", "quality", "quantity", "tracking"]
+    },
+    {
+      "id": "job_search_003",
+      "category": "job_search",
+      "intent": "no_responses",
+      "question_variants": [
+        "قدمت كثير وما حدا رد علي",
+        "I applied to many jobs and got no interviews",
+        "Why am I not hearing back?"
+      ],
+      "context_needed": [
+        "number_of_applications",
+        "target_roles",
+        "cv",
+        "job_descriptions",
+        "application_sources"
+      ],
+      "follow_up_questions_ar": [
+        "على كم وظيفة قدمت وخلال كم أسبوع؟",
+        "كم نسبة الوظائف التي تطابق أغلب متطلباتها؟",
+        "هل تستخدم Referral أو Outreach أم تقديم مباشر فقط؟"
+      ],
+      "follow_up_questions_en": [
+        "How many roles did you apply to and over what period?",
+        "How many matched most of your real qualifications?",
+        "Are you using referrals or outreach, or only direct applications?"
+      ],
+      "answer_core_ar": "عدم وجود مقابلات غالبًا يعني مشكلة قبل مرحلة المقابلة: اختيار وظائف غير مناسبة، CV لا يوضح الدليل بسرعة، أو اعتماد كامل على التقديم البارد. لا نفترض أنك غير مؤهل؛ نراجع الـFunnel ونحدد أين يتوقف.",
+      "answer_core_en": "No interviews usually indicates a problem before the interview stage: weak role fit, a CV that hides the evidence, or full dependence on cold applications. It does not automatically mean you are unqualified; review the funnel and find where it stops.",
+      "action_steps_ar": [
+        "اختر خمسة طلبات سابقة وقارنها بالـCV نقطة بنقطة.",
+        "اطلب مراجعة الـCV من شخص في نفس الدور.",
+        "أضف Outreach مخصصًا للطلبات الأقوى."
+      ],
+      "action_steps_en": [
+        "Audit five previous applications against the CV requirement by requirement.",
+        "Ask someone in the same role to review the CV.",
+        "Add personalized outreach to the strongest applications."
+      ],
+      "tags": ["no-response", "diagnosis", "funnel", "applications"]
+    },
+    {
+      "id": "job_search_004",
+      "category": "job_search",
+      "intent": "application_follow_up",
+      "question_variants": [
+        "متى أعمل follow-up بعد التقديم؟",
+        "Should I follow up after applying?",
+        "شو أكتب للRecruiter بعد ما قدمت؟"
+      ],
+      "context_needed": [
+        "application_date",
+        "contact_person",
+        "job_deadline",
+        "company_instructions"
+      ],
+      "follow_up_questions_ar": [
+        "متى قدمت؟",
+        "هل الإعلان حدد Timeline أو منع التواصل؟"
+      ],
+      "follow_up_questions_en": [
+        "When did you apply?",
+        "Did the posting give a timeline or ask candidates not to contact the team?"
+      ],
+      "answer_core_ar": "إذا لم توجد تعليمات مختلفة، Follow-up محترم بعد نحو 5 إلى 7 أيام عمل مناسب غالبًا. اجعله قصيرًا، اذكر الوظيفة وتاريخ التقديم وسبب ملاءمة واحد، ثم اسأل عن حالة العملية بدون ضغط.",
+      "answer_core_en": "Unless the company gives different instructions, a respectful follow-up after about five to seven business days is often reasonable. Keep it short, mention the role and application date, give one relevant fit point, and ask about the process without pressure.",
+      "action_steps_ar": [
+        "أرسل متابعة واحدة واضحة.",
+        "إذا لم يصل رد، استمر بفرص أخرى بدل المتابعة اليومية."
+      ],
+      "action_steps_en": [
+        "Send one clear follow-up.",
+        "If there is no response, keep pursuing other roles instead of messaging daily."
+      ],
+      "tags": ["follow-up", "recruiter", "application", "etiquette"]
+    },
+    {
+      "id": "job_search_005",
+      "category": "job_search",
+      "intent": "detect_job_scam",
+      "question_variants": [
+        "كيف أعرف إذا الوظيفة نصب؟",
+        "How can I identify a fake remote job?",
+        "طلبوا مني أدفع عشان أبدأ، طبيعي؟"
+      ],
+      "context_needed": [
+        "company_name",
+        "communication_channel",
+        "payment_request",
+        "contract_details"
+      ],
+      "follow_up_questions_ar": [
+        "هل التواصل من Email رسمي تابع للشركة؟",
+        "هل طلبوا دفع مال أو بيانات بنكية أو شراء معدات منهم؟",
+        "هل يوجد إعلان مطابق على موقع الشركة؟"
+      ],
+      "follow_up_questions_en": [
+        "Is the communication coming from an official company domain?",
+        "Did they request money, banking information, or equipment purchases from them?",
+        "Does the same role appear on the company's official website?"
+      ],
+      "answer_core_ar": "طلب الدفع للحصول على وظيفة، المقابلة عبر رسائل فقط، الضغط لإرسال بيانات حساسة، راتب غير واقعي، أو Domain مقلد كلها إشارات خطر. توقف عن مشاركة المعلومات وتحقق من الموقع الرسمي وهوية الشخص بشكل مستقل.",
+      "answer_core_en": "Requests for payment, text-only interviews, pressure for sensitive information, unrealistic pay, or an imitation domain are major warning signs. Stop sharing information and independently verify the company and contact through official channels.",
+      "action_steps_ar": [
+        "لا تدفع ولا ترسل بيانات حساسة.",
+        "تواصل مع الشركة من بيانات موقعها الرسمي.",
+        "احتفظ بالرسائل وبلّغ المنصة إذا تأكد الاحتيال."
+      ],
+      "action_steps_en": [
+        "Do not pay or share sensitive information.",
+        "Contact the company using details from its official website.",
+        "Keep the messages and report the listing if fraud is confirmed."
+      ],
+      "tags": ["scam", "remote", "privacy", "safety"]
+    },
+    {
+      "id": "interview_001",
+      "category": "interview",
+      "intent": "tell_me_about_yourself",
+      "question_variants": [
+        "كيف أجاوب Tell me about yourself؟",
+        "Help me answer tell me about yourself",
+        "شو أحكي بأول المقابلة عن حالي؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "current_status",
+        "strongest_experience",
+        "motivation_for_role"
+      ],
+      "follow_up_questions_ar": [
+        "شو الوظيفة؟",
+        "شو أقوى مشروع أو خبرة مرتبطة فيها؟",
+        "ليش مهتم بهاي الشركة أو المشكلة؟"
+      ],
+      "follow_up_questions_en": [
+        "What is the role?",
+        "What is your strongest related project or experience?",
+        "Why are you interested in this company or problem?"
+      ],
+      "answer_core_ar": "استخدم Present-Past-Future: وضعك المهني الحالي، تجربة أو إنجاز مرتبط بالدور، ثم لماذا هذه الفرصة هي الخطوة التالية. خلي الجواب بين 60 و90 ثانية وركز على الوظيفة، مش قصة حياتك.",
+      "answer_core_en": "Use Present-Past-Future: your current professional direction, one relevant experience or achievement, and why this opportunity is the logical next step. Keep it to about 60 to 90 seconds and focus on the role rather than your life story.",
+      "action_steps_ar": [
+        "اكتب ثلاث نقاط بدل حفظ فقرة حرفيًا.",
+        "سجل جوابك مرة واحدة.",
+        "احذف التفاصيل التي لا تخدم الوظيفة."
+      ],
+      "action_steps_en": [
+        "Write three talking points instead of memorizing a paragraph.",
+        "Record one practice answer.",
+        "Remove details that do not support the role."
+      ],
+      "tags": ["interview", "introduction", "storytelling"]
+    },
+    {
+      "id": "interview_002",
+      "category": "interview",
+      "intent": "start_mock_interview",
+      "question_variants": [
+        "عندي remote interview لjunior data role الأسبوع الجاي",
+        "I have a remote interview for a junior data role next week",
+        "اعمل معي mock interview"
+      ],
+      "context_needed": [
+        "job_description",
+        "company_type",
+        "interview_stage",
+        "candidate_background",
+        "preferred_language"
+      ],
+      "follow_up_questions_ar": [
+        "ابعث وصف الوظيفة أو أهم متطلباتها.",
+        "هاي أول مقابلة HR ولا Technical؟",
+        "بدك المقابلة بالعربي، English، ولا mixed؟"
+      ],
+      "follow_up_questions_en": [
+        "Share the job description or its main requirements.",
+        "Is this an HR screen or a technical interview?",
+        "Should the mock interview be in Arabic, English, or mixed?"
+      ],
+      "answer_core_ar": "رح أعمل سؤالًا واحدًا كل مرة، أستنى جوابك، ثم أعطي Feedback محدد على المحتوى والوضوح والدليل قبل السؤال التالي. لدور Junior Data نتوقع عادةً أساسيات SQL وPython وتنظيف البيانات وشرح مشروع واتخاذ قرار من البيانات، لكن وصف الوظيفة هو المرجع.",
+      "answer_core_en": "I will ask one question at a time, wait for your answer, then give specific feedback on content, clarity, and evidence before continuing. A junior data role often covers SQL, Python, data cleaning, project explanation, and decision-making from data, but the job description remains the source of truth.",
+      "action_steps_ar": [
+        "ابدأ بسؤال التعريف والدافع.",
+        "انتقل لسؤال مشروع تقني ثم موقف سلوكي.",
+        "اختم بنقطتي تحسين وخطة تدريب."
+      ],
+      "action_steps_en": [
+        "Start with motivation and introduction.",
+        "Move to a technical project question and one behavioral scenario.",
+        "Finish with two improvement priorities and a practice plan."
+      ],
+      "tags": ["mock-interview", "data", "remote", "TAP-use-case"]
+    },
+    {
+      "id": "interview_003",
+      "category": "interview",
+      "intent": "ai_interview_preparation",
+      "question_variants": [
+        "كيف أتحضر لمقابلة AI Engineer Junior؟",
+        "What should I prepare for a junior ML interview?",
+        "عندي interview للAI شو أراجع؟"
+      ],
+      "context_needed": [
+        "job_description",
+        "projects",
+        "interview_stage",
+        "tools_used"
+      ],
+      "follow_up_questions_ar": [
+        "شو أهم التقنيات في الإعلان؟",
+        "أي مشروع ML رح تناقشه؟",
+        "هل المقابلة Coding، ML concepts، System Design، أم خليط؟"
+      ],
+      "follow_up_questions_en": [
+        "Which technologies appear in the posting?",
+        "Which ML project will you discuss?",
+        "Is the interview focused on coding, ML concepts, system design, or a mix?"
+      ],
+      "answer_core_ar": "ركز على فهم مشروعك بعمق أكثر من حفظ تعريفات: اختيار البيانات، التنظيف، Baseline، Metric، أخطاء المودل، Overfitting، Deployment، وما الذي ستغيره. راجع Python وSQL والأساسيات المذكورة بالإعلان، ولا تدعي استخدام أداة لم تستخدمها.",
+      "answer_core_en": "Understand your own project more deeply than memorized definitions: data choice, cleaning, baseline, metrics, model errors, overfitting, deployment, and what you would improve. Review Python, SQL, and the concepts named in the posting, and never claim a tool you did not use.",
+      "action_steps_ar": [
+        "حضّر شرح مشروع من دقيقتين.",
+        "اكتب خمسة قرارات اتخذتها ولماذا.",
+        "تدرب على سؤال فشل المودل وكيف قسته."
+      ],
+      "action_steps_en": [
+        "Prepare a two-minute project explanation.",
+        "Write down five decisions you made and why.",
+        "Practice explaining a model failure and how you measured it."
+      ],
+      "tags": ["AI", "ML", "interview", "junior", "technical"]
+    },
+    {
+      "id": "interview_004",
+      "category": "interview",
+      "intent": "unknown_interview_answer",
+      "question_variants": [
+        "شو أعمل إذا ما عرفت جواب سؤال بالمقابلة؟",
+        "What should I say when I do not know an interview answer?",
+        "إذا نسيت technical answer أتوتر؟"
+      ],
+      "context_needed": [
+        "question_type",
+        "interview_stage"
+      ],
+      "follow_up_questions_ar": [
+        "هل السؤال Concept، Coding، ولا متعلق بخبرتك؟"
+      ],
+      "follow_up_questions_en": [
+        "Was it a concept, coding, or experience question?"
+      ],
+      "answer_core_ar": "لا تخمن بثقة. وضح ما تعرفه، اسأل سؤال توضيحي، وفكر بصوت مرتب. ممكن تقول إنك لا تتذكر التفصيل الآن ثم تشرح كيف ستصل للإجابة أو كيف تعاملت مع شيء قريب. الصدق مع منهجية جيدة أفضل من اختراع جواب.",
+      "answer_core_en": "Do not bluff. State what you know, ask a clarifying question, and reason in a structured way. You can say you do not recall a detail, then explain how you would find the answer or connect it to a related problem. Honest reasoning is stronger than an invented answer.",
+      "action_steps_ar": [
+        "خذ ثواني للتفكير بدل الإجابة فورًا.",
+        "اذكر الافتراضات التي تبني عليها.",
+        "اختم بما ستتحقق منه لو كان هذا موقف عمل حقيقي."
+      ],
+      "action_steps_en": [
+        "Take a few seconds before answering.",
+        "State the assumptions behind your reasoning.",
+        "Finish with what you would verify in a real work setting."
+      ],
+      "tags": ["interview", "unknown-answer", "honesty", "reasoning"]
+    },
+    {
+      "id": "interview_005",
+      "category": "interview",
+      "intent": "behavioral_star",
+      "question_variants": [
+        "كيف أجاوب behavioral questions؟",
+        "Explain the STAR method",
+        "احكيلي عن موقف صار معك، كيف أرتب الجواب؟"
+      ],
+      "context_needed": [
+        "behavioral_question",
+        "candidate_story",
+        "target_competency"
+      ],
+      "follow_up_questions_ar": [
+        "شو السؤال أو المهارة التي يقيسها؟",
+        "أي موقف حقيقي عندك يثبتها؟"
+      ],
+      "follow_up_questions_en": [
+        "What question or competency is being tested?",
+        "Which real situation proves it?"
+      ],
+      "answer_core_ar": "رتب القصة بأسلوب STAR: Situation باختصار، Task ومسؤوليتك، Action يركز على ما فعلته أنت، وResult واضح مع تعلمك. أكبر خطأ هو قضاء معظم الوقت في وصف المشكلة ونسيان أفعالك والنتيجة.",
+      "answer_core_en": "Use STAR: briefly explain the Situation, define your Task, focus on the Action you personally took, and finish with the Result and lesson. The common mistake is spending too long on context and too little on actions and outcomes.",
+      "action_steps_ar": [
+        "جهز خمس قصص تغطي التعاون والخلاف والمبادرة والفشل وضغط الوقت.",
+        "اختصر كل قصة إلى دقيقتين.",
+        "أضف نتيجة قابلة للملاحظة متى أمكن."
+      ],
+      "action_steps_en": [
+        "Prepare five stories covering teamwork, conflict, initiative, failure, and time pressure.",
+        "Keep each story under two minutes.",
+        "Include an observable outcome when possible."
+      ],
+      "tags": ["STAR", "behavioral", "interview", "story"]
+    },
+    {
+      "id": "interview_006",
+      "category": "interview",
+      "intent": "english_interview_anxiety",
+      "question_variants": [
+        "الإنجليزي عندي مش ممتاز وخايف من المقابلة",
+        "My English is not perfect. How can I handle the interview?",
+        "بفهم English بس بتوتر بالحكي"
+      ],
+      "context_needed": [
+        "English_level",
+        "interview_date",
+        "target_role",
+        "main_difficulty"
+      ],
+      "follow_up_questions_ar": [
+        "متى المقابلة؟",
+        "المشكلة الأكبر مفردات، سرعة فهم، ولا توتر؟",
+        "هل الدور يحتاج تواصل يومي مكثف بالإنجليزية؟"
+      ],
+      "follow_up_questions_en": [
+        "When is the interview?",
+        "Is the main challenge vocabulary, listening speed, or anxiety?",
+        "Does the role require intensive daily English communication?"
+      ],
+      "answer_core_ar": "المقابلة لا تحتاج Accent مثالية؛ تحتاج وضوحًا وفهمًا. استخدم جملًا أقصر، اطلب إعادة السؤال إذا لزم، وخذ وقتك. تدرب على الأسئلة المتوقعة بصوت عالٍ بدل حفظ نص طويل قد تنساه.",
+      "answer_core_en": "An interview does not require a perfect accent; it requires clarity and understanding. Use shorter sentences, ask for repetition when needed, and take your time. Practice likely questions aloud instead of memorizing long scripts.",
+      "action_steps_ar": [
+        "تدرب يوميًا على ثلاثة أجوبة أساسية.",
+        "جهز عبارات لطلب التوضيح وكسب وقت التفكير.",
+        "اعمل Mock Interview مسجلة وراجع الوضوح، مش اللكنة."
+      ],
+      "action_steps_en": [
+        "Practice three core answers aloud each day.",
+        "Prepare phrases for clarification and thinking time.",
+        "Record a mock interview and review clarity rather than accent."
+      ],
+      "tags": ["English", "interview", "confidence", "communication"]
+    },
+    {
+      "id": "interview_007",
+      "category": "interview",
+      "intent": "salary_expectations",
+      "question_variants": [
+        "شو أجاوب لما يسألوني عن الراتب المتوقع؟",
+        "What are your salary expectations?",
+        "كيف أحدد salary للremote job؟"
+      ],
+      "context_needed": [
+        "role",
+        "seniority",
+        "location",
+        "employment_type",
+        "currency",
+        "benefits"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور والمستوى؟",
+        "العقد Employee ولا Contractor؟",
+        "شو العملة والمزايا وساعات العمل؟"
+      ],
+      "follow_up_questions_en": [
+        "What is the role and seniority level?",
+        "Is it an employee or contractor arrangement?",
+        "What are the currency, benefits, and working hours?"
+      ],
+      "answer_core_ar": "لا تعطي رقمًا بلا سياق. حاول معرفة Range الشركة أولًا، ثم أعط نطاقًا مدروسًا ووضح أنه يعتمد على المسؤوليات ونوع العقد والمزايا والعملة. في الـRemote، قارن صافي التعويض بعد الضرائب والرسوم والمعدات والإجازات، مش الرقم الإجمالي فقط.",
+      "answer_core_en": "Do not give a number without context. Ask for the company's range when possible, then provide a researched range and explain that it depends on responsibilities, employment type, benefits, and currency. For remote work, compare net value after taxes, fees, equipment, and leave rather than only gross pay.",
+      "action_steps_ar": [
+        "ابحث عن نطاقات حديثة لنفس الدور والسوق.",
+        "حدد الحد الأدنى المقبول قبل المقابلة.",
+        "لا تخترع رقمًا سوقيًا إذا لم تملك مصدرًا موثوقًا."
+      ],
+      "action_steps_en": [
+        "Research current ranges for the same role and market.",
+        "Define your minimum acceptable package before the interview.",
+        "Do not present an unsupported number as a market fact."
+      ],
+      "tags": ["salary", "remote", "negotiation", "contract"]
+    },
+    {
+      "id": "interview_008",
+      "category": "interview",
+      "intent": "remote_interview_setup",
+      "question_variants": [
+        "كيف أجهز للremote interview؟",
+        "What should I check before a video interview?",
+        "النت عندي ممكن يقطع، شو أعمل؟"
+      ],
+      "context_needed": [
+        "internet_reliability",
+        "device",
+        "interview_platform",
+        "backup_options"
+      ],
+      "follow_up_questions_ar": [
+        "على أي منصة المقابلة؟",
+        "هل عندك بديل للإنترنت أو الكهرباء؟"
+      ],
+      "follow_up_questions_en": [
+        "Which platform will the interview use?",
+        "Do you have a backup for internet or power?"
+      ],
+      "answer_core_ar": "اختبر المنصة والكاميرا والصوت والاسم الظاهر قبل المقابلة، وجهز رابطًا احتياطيًا أو Mobile hotspot إن أمكن. إذا انقطع الاتصال، ارجع بسرعة وأرسل رسالة قصيرة بدون اعتذار مفرط. الظروف التقنية لا تقلل من مهنيتك إذا تعاملت معها بوضوح.",
+      "answer_core_en": "Test the platform, camera, microphone, and display name before the interview, and prepare a backup connection such as a mobile hotspot when possible. If the connection fails, rejoin and send a short update without over-apologizing. Technical constraints do not reduce your professionalism when handled clearly.",
+      "action_steps_ar": [
+        "اعمل مكالمة اختبار في نفس المكان والوقت تقريبًا.",
+        "احفظ رقم أو Email المسؤول.",
+        "جهز نسخة Offline من الـCV ووصف الوظيفة."
+      ],
+      "action_steps_en": [
+        "Run a test call from the same place at a similar time.",
+        "Save the interviewer's phone number or email.",
+        "Keep offline copies of the CV and job description."
+      ],
+      "tags": ["remote", "interview", "connectivity", "Palestine"]
+    },
+    {
+      "id": "interview_009",
+      "category": "interview",
+      "intent": "handle_rejection",
+      "question_variants": [
+        "انرفضت بعد آخر مقابلة، شو أعمل؟",
+        "I was rejected after the final interview",
+        "كيف أتعلم من الرفض؟"
+      ],
+      "context_needed": [
+        "interview_stage",
+        "feedback_received",
+        "candidate_reflection",
+        "pipeline_status"
+      ],
+      "follow_up_questions_ar": [
+        "هل أعطوك Feedback؟",
+        "أي سؤال أو مرحلة شعرت أنها الأضعف؟",
+        "هل عندك فرص أخرى قيد التقديم؟"
+      ],
+      "follow_up_questions_en": [
+        "Did they provide feedback?",
+        "Which question or stage felt weakest?",
+        "Do you have other active applications?"
+      ],
+      "answer_core_ar": "الوصول للمرحلة الأخيرة دليل أن ملفك قريب من المطلوب، والرفض قد يكون بسبب مقارنة دقيقة أو قرار داخلي لا تعرفه. اطلب Feedback باحترام، وثّق الأسئلة، أصلح نقطة واحدة أو اثنتين، وحافظ على Pipeline بدل انتظار شركة واحدة.",
+      "answer_core_en": "Reaching the final stage shows that your profile is close to the target. Rejection may come from a narrow comparison or an internal decision you cannot see. Ask for feedback respectfully, record the questions, improve one or two points, and keep a wider pipeline instead of waiting on one company.",
+      "action_steps_ar": [
+        "أرسل رسالة شكر وطلب Feedback واحدة.",
+        "اكتب After-Action Review خلال 24 ساعة.",
+        "حوّل أضعف سؤال إلى تدريب للمقابلة التالية."
+      ],
+      "action_steps_en": [
+        "Send one thank-you and feedback request.",
+        "Complete an after-action review within 24 hours.",
+        "Turn the weakest question into practice for the next interview."
+      ],
+      "tags": ["rejection", "feedback", "resilience", "pipeline"]
+    },
+    {
+      "id": "skills_001",
+      "category": "skills",
+      "intent": "identify_skill_gap",
+      "question_variants": [
+        "شو لازم أتعلم عشان أصير job ready؟",
+        "What skills am I missing for this role?",
+        "كيف أعمل skill gap analysis؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "job_descriptions",
+        "current_skills",
+        "projects",
+        "time_available"
+      ],
+      "follow_up_questions_ar": [
+        "ابعث ثلاثة إعلانات حقيقية للدور.",
+        "شو المهارات التي استخدمتها فعليًا بمشروع؟"
+      ],
+      "follow_up_questions_en": [
+        "Share three real job descriptions for the role.",
+        "Which skills have you actually used in a project?"
+      ],
+      "answer_core_ar": "لا تتعلم قائمة لا تنتهي. صنف المتطلبات إلى: أساسي لازم الآن، مهم يمكن تعلمه خلال العمل، وإضافة اختيارية. أعط الأولوية للمهارات المتكررة في الإعلانات والتي تستطيع إثباتها بمشروع أو Task.",
+      "answer_core_en": "Do not chase an endless list. Classify requirements as essential now, learnable on the job, and optional. Prioritize skills repeated across real postings that you can prove through a project or task.",
+      "action_steps_ar": [
+        "ابنِ جدول: المتطلب، تكراره، مستواك، والدليل.",
+        "اختر فجوتين أساسيتين فقط للدورة القادمة.",
+        "اربط كل مهارة بمخرج قابل للعرض."
+      ],
+      "action_steps_en": [
+        "Create a table with requirement, frequency, current level, and evidence.",
+        "Choose only two essential gaps for the next learning cycle.",
+        "Connect each skill to a visible output."
+      ],
+      "tags": ["skills", "gap-analysis", "job-ready", "learning"]
+    },
+    {
+      "id": "portfolio_001",
+      "category": "portfolio",
+      "intent": "choose_portfolio_project",
+      "question_variants": [
+        "شو مشروع أعمل للPortfolio؟",
+        "What project should I build to get hired?",
+        "بدي project مش مكرر ويخدمني بالتوظيف"
+      ],
+      "context_needed": [
+        "target_role",
+        "current_skills",
+        "local_problem_interest",
+        "available_time"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدور الذي تريد أن يقتنع بك بسببه؟",
+        "ما المشكلة الحقيقية التي تعرفها أو تستطيع الوصول لبياناتها؟",
+        "كم وقت عندك؟"
+      ],
+      "follow_up_questions_en": [
+        "Which role should this project convince an employer you can do?",
+        "What real problem or accessible dataset can you work with?",
+        "How much time is available?"
+      ],
+      "answer_core_ar": "أفضل مشروع ليس الأكثر تعقيدًا؛ هو الذي يشبه مهمة حقيقية بالدور ويملك مستخدمًا أو Dataset أو قيودًا واضحة. مشروع مرتبط بمشكلة MENA حقيقية قد يميزك إذا كانت الجودة التقنية والتوثيق قويين.",
+      "answer_core_en": "The best project is not the most complex one; it resembles real work for the target role and has a defined user, dataset, or constraint. A project grounded in a real MENA problem can differentiate you when the technical quality and documentation are strong.",
+      "action_steps_ar": [
+        "اكتب مشكلة المستخدم في جملة واحدة.",
+        "حدد MVP يمكن إنهاؤه خلال أسبوعين أو ثلاثة.",
+        "أضف قياسًا للنجاح وDemo وتوثيقًا واضحًا."
+      ],
+      "action_steps_en": [
+        "State the user problem in one sentence.",
+        "Define an MVP that can be completed in two or three weeks.",
+        "Add a success metric, demo, and clear documentation."
+      ],
+      "tags": ["portfolio", "project", "MENA", "evidence"]
+    },
+    {
+      "id": "portfolio_002",
+      "category": "portfolio",
+      "intent": "improve_github",
+      "question_variants": [
+        "كيف أرتب GitHub للتوظيف؟",
+        "How can I make my GitHub recruiter-friendly?",
+        "عندي مشاريع بس الrepos مش مرتبة"
+      ],
+      "context_needed": [
+        "target_role",
+        "repository_list",
+        "best_projects"
+      ],
+      "follow_up_questions_ar": [
+        "شو أقوى ثلاثة Repositories؟",
+        "هل كل واحد فيه README وتشغيل واضح؟"
+      ],
+      "follow_up_questions_en": [
+        "Which three repositories are strongest?",
+        "Does each have a clear README and setup instructions?"
+      ],
+      "answer_core_ar": "الـRecruiter مش رح يراجع كل شيء. ثبت أفضل ثلاثة Repositories، واكتب README يوضح المشكلة، Screenshot أو Demo، طريقة التشغيل، Architecture مختصرة، مساهمتك، والنتائج. نظف الأسرار والملفات غير اللازمة قبل النشر.",
+      "answer_core_en": "A recruiter will not inspect everything. Pin the best three repositories and include a README with the problem, screenshot or demo, setup, brief architecture, your contribution, and results. Remove secrets and unnecessary files before publishing.",
+      "action_steps_ar": [
+        "ثبت ثلاثة مشاريع مرتبطة بالدور.",
+        "اختبر خطوات التشغيل على جهاز أو Environment نظيف.",
+        "أضف License مناسبًا ولا تنشر مفاتيح API."
+      ],
+      "action_steps_en": [
+        "Pin three role-relevant projects.",
+        "Test setup instructions in a clean environment.",
+        "Add an appropriate license and never publish API keys."
+      ],
+      "tags": ["GitHub", "portfolio", "README", "security"]
+    },
+    {
+      "id": "skills_002",
+      "category": "skills",
+      "intent": "certificates_vs_projects",
+      "question_variants": [
+        "آخذ شهادات أكثر ولا أعمل مشاريع؟",
+        "Are certificates more important than projects?",
+        "courses ولا portfolio؟"
+      ],
+      "context_needed": [
+        "target_role",
+        "current_certificates",
+        "portfolio_strength",
+        "skill_gap"
+      ],
+      "follow_up_questions_ar": [
+        "هل الشهادة مطلوبة فعليًا بالإعلانات؟",
+        "هل عندك مشروع يثبت أنك طبقت المادة؟"
+      ],
+      "follow_up_questions_en": [
+        "Is the certification genuinely requested in job descriptions?",
+        "Do you have a project proving you applied the material?"
+      ],
+      "answer_core_ar": "للأدوار التقنية المبتدئة، المشروع القوي غالبًا يثبت قدرتك أكثر من كثرة الشهادات. الشهادة مفيدة إذا كانت معروفة أو مطلوبة أو تسد فجوة محددة، لكن الأفضل ربط كل تعلم بتطبيق عملي.",
+      "answer_core_en": "For many junior technical roles, a strong project usually proves ability better than a long certificate list. A certificate helps when it is recognized, requested, or fills a specific gap, but connect learning to practical work.",
+      "action_steps_ar": [
+        "أوقف جمع الشهادات العامة مؤقتًا.",
+        "حوّل أقوى Course إلى مشروع كامل.",
+        "أضف الشهادة فقط إذا دعمت قصة مهنية واضحة."
+      ],
+      "action_steps_en": [
+        "Pause collecting generic certificates.",
+        "Turn the strongest course into a complete project.",
+        "Include the certificate when it supports a clear professional story."
+      ],
+      "tags": ["certificates", "projects", "learning", "evidence"]
+    },
+    {
+      "id": "remote_001",
+      "category": "remote_work",
+      "intent": "remote_hiring_from_palestine",
+      "question_variants": [
+        "هل الشركات برا بتوظف من فلسطين؟",
+        "Can international companies hire someone based in Palestine?",
+        "موقعي بالضفة أو غزة ممكن يمنعني من remote job؟"
+      ],
+      "context_needed": [
+        "location",
+        "target_company_country",
+        "employment_type",
+        "connectivity",
+        "payment_options"
+      ],
+      "follow_up_questions_ar": [
+        "من أي منطقة وأي سوق مستهدف؟",
+        "هل الإعلان يقبل التوظيف الدولي أو Contractor؟",
+        "هل عندك تجهيز مناسب واتصال احتياطي؟"
+      ],
+      "follow_up_questions_en": [
+        "Where are you based and which market are you targeting?",
+        "Does the posting allow international hiring or contractors?",
+        "Do you have a suitable setup and a backup connection?"
+      ],
+      "answer_core_ar": "نعم، توجد شركات توظف مواهب من فلسطين عن بُعد، لكن ليس كل شركة تستطيع ذلك. القرار يعتمد على بلد الشركة، نوع العقد، سياسات Compliance والدفع، ومتطلبات التوقيت والاتصال. تحقق من أهلية الموقع مبكرًا وقدم خطة عمل موثوقة بدل إخفاء مكانك.",
+      "answer_core_en": "Yes, some companies hire Palestinian talent remotely, but not every company can do so. It depends on the employer's country, contract model, compliance and payment policies, time zone, and connectivity requirements. Check location eligibility early and present a reliable work setup rather than hiding your location.",
+      "action_steps_ar": [
+        "راجع Location policy قبل استثمار وقت طويل بالطلب.",
+        "اسأل عن Employee أو Contractor أو EOR عند المرحلة المناسبة.",
+        "جهز وصفًا صادقًا لخطة الإنترنت والكهرباء والاتصال."
+      ],
+      "action_steps_en": [
+        "Check location policy before investing heavily in an application.",
+        "Ask about employee, contractor, or EOR options at the appropriate stage.",
+        "Prepare an honest explanation of your internet, power, and communication setup."
+      ],
+      "tags": ["Palestine", "remote", "EOR", "compliance", "connectivity"]
+    },
+    {
+      "id": "remote_002",
+      "category": "remote_work",
+      "intent": "employee_contractor_eor",
+      "question_variants": [
+        "شو الفرق بين Employee وContractor وEOR؟",
+        "What does EOR mean for a remote job?",
+        "الشركة بدها توظفني contractor، شو أنتبه؟"
+      ],
+      "context_needed": [
+        "company_country",
+        "candidate_location",
+        "contract_type",
+        "benefits",
+        "payment_terms"
+      ],
+      "follow_up_questions_ar": [
+        "شو نوع العقد المعروض؟",
+        "مين مسؤول عن الضرائب والتأمين والإجازات؟",
+        "كيف ومتى سيتم الدفع؟"
+      ],
+      "follow_up_questions_en": [
+        "What contract type is being offered?",
+        "Who is responsible for taxes, insurance, and leave?",
+        "How and when will payment be made?"
+      ],
+      "answer_core_ar": "Employee يعمل مباشرة لدى الشركة وفق كيانها، Contractor يقدم خدمة ويتحمل عادةً مسؤوليات أكبر عن الضرائب والمزايا، وEOR جهة محلية أو دولية تصبح صاحب العمل القانوني نيابة عن الشركة. التفاصيل تختلف حسب البلد، لذلك هذا شرح عام وليس نصيحة قانونية.",
+      "answer_core_en": "An employee works under the company's employing entity, a contractor provides services and usually carries more responsibility for taxes and benefits, and an EOR becomes the legal employer on the company's behalf. Details vary by country, so this is general information rather than legal advice.",
+      "action_steps_ar": [
+        "اقرأ بند الإنهاء والملكية الفكرية وساعات العمل.",
+        "احسب التعويض بعد الرسوم والمزايا المفقودة.",
+        "استشر مختصًا محليًا إذا كانت الضرائب أو قانون العقد غير واضحة."
+      ],
+      "action_steps_en": [
+        "Review termination, intellectual-property, and working-hour clauses.",
+        "Calculate compensation after fees and missing benefits.",
+        "Consult a qualified local professional when tax or contract law is unclear."
+      ],
+      "tags": ["contractor", "employee", "EOR", "remote", "legal-boundary"]
+    },
+    {
+      "id": "mena_001",
+      "category": "mena_context",
+      "intent": "compete_globally",
+      "question_variants": [
+        "كيف أنافس ناس من كل العالم على remote job؟",
+        "How can a MENA graduate compete for global roles?",
+        "بحس موقعي وشبكتي أضعف من باقي المتقدمين"
+      ],
+      "context_needed": [
+        "target_role",
+        "differentiators",
+        "projects",
+        "network",
+        "English_level"
+      ],
+      "follow_up_questions_ar": [
+        "شو الدليل الأقوى على مهارتك؟",
+        "أي مشكلة أو سوق تفهمه أفضل من المنافسين؟",
+        "هل عندك شخص يمكنه إحالتك أو مراجعة ملفك؟"
+      ],
+      "follow_up_questions_en": [
+        "What is your strongest evidence of ability?",
+        "Which problem or market do you understand better than other candidates?",
+        "Can anyone refer you or review your profile?"
+      ],
+      "answer_core_ar": "لا تحاول منافسة الجميع بنفس الملف العام. اختر Niche واضحًا، أثبت مهاراتك بمشروع حقيقي، استخدم فهمك لسوق أو مشكلة MENA كميزة، وابنِ علاقات قبل فتح الوظيفة. الاستهداف والدليل يقللان أثر ضعف الوصول.",
+      "answer_core_en": "Do not compete with everyone using a generic profile. Choose a clear niche, prove skills through real work, use your understanding of a MENA market or problem as an advantage, and build relationships before roles open. Focus and evidence reduce the access gap.",
+      "action_steps_ar": [
+        "حدد جملة Value Proposition واحدة.",
+        "ابنِ Case Study مرتبطة بمشكلة حقيقية.",
+        "تواصل أسبوعيًا مع أشخاص في الشركات المستهدفة."
+      ],
+      "action_steps_en": [
+        "Define one clear value proposition.",
+        "Build a case study around a real problem.",
+        "Connect weekly with people in target companies."
+      ],
+      "tags": ["MENA", "global-market", "positioning", "network"]
+    },
+    {
+      "id": "tap_001",
+      "category": "tap_program",
+      "intent": "what_is_tap",
+      "question_variants": [
+        "شو هي TAP؟",
+        "What does TAP do?",
+        "كيف TAP بتساعدني ألاقي شغل؟"
+      ],
+      "context_needed": [],
+      "follow_up_questions_ar": [],
+      "follow_up_questions_en": [],
+      "answer_core_ar": "TAP منصة مدعومة بالذكاء الاصطناعي تربط باحثين عن عمل ذوي إمكانات عالية من فلسطين والمنطقة بمحترفين وأصحاب عمل عالميين. بحسب الـChallenge Brief، تقدم Mentorship وCareer Coaching ومسارات توظيف مباشرة، وقد ساعدت في إطلاق أكثر من 500 مسيرة مهنية. تحقق دائمًا من الموقع الرسمي لأحدث التفاصيل.",
+      "answer_core_en": "TAP is an AI-enabled platform connecting high-potential job seekers from Palestine and the wider region with global professionals and employers. According to the challenge brief, it offers mentorship, career coaching, and direct hiring pathways and has helped launch more than 500 careers. Check the official site for current details.",
+      "action_steps_ar": [
+        "راجع شروط الأهلية الحالية على الموقع الرسمي.",
+        "جهز معلوماتك المهنية وأهدافك قبل التقديم."
+      ],
+      "action_steps_en": [
+        "Review current eligibility on the official website.",
+        "Prepare your background and career goals before applying."
+      ],
+      "tags": ["TAP", "program", "mentorship", "coaching"],
+      "source_refs": ["TAP_Challenge_Brief.pdf", "https://www.tapcareers.io/for-jobseekers"]
+    },
+    {
+      "id": "tap_002",
+      "category": "tap_program",
+      "intent": "tap_job_timeline",
+      "question_variants": [
+        "كم بحتاج وقت عشان ألاقي وظيفة مع TAP؟",
+        "How long does it take to get a job through TAP?",
+        "هل الأربعة أشهر مضمونة؟"
+      ],
+      "context_needed": [
+        "readiness",
+        "target_role",
+        "weekly_commitment",
+        "market_conditions"
+      ],
+      "follow_up_questions_ar": [
+        "هل عندك المهارات الأساسية للدور المستهدف؟",
+        "هل تستطيع الالتزام بنحو 15 ساعة أسبوعيًا؟"
+      ],
+      "follow_up_questions_en": [
+        "Do you already have the core skills for your target role?",
+        "Can you commit about fifteen hours per week?"
+      ],
+      "answer_core_ar": "بحسب FAQ المنشور لدى TAP، يوصون بنحو 15 ساعة أسبوعيًا، ويذكرون أن معظم المشاركين يحصلون على وظائف خلال أربعة أشهر. هذا متوسط أو نتيجة شائعة وليس ضمانًا؛ المدة تتأثر بجاهزيتك والدور والمنافسة وسرعة عمليات الشركات.",
+      "answer_core_en": "According to TAP's published FAQ, it recommends about fifteen hours per week and says most participants land jobs within four months. This is a typical outcome, not a guarantee; timing depends on readiness, role, competition, and employer processes.",
+      "action_steps_ar": [
+        "تعامل مع الأربعة أشهر كفترة بحث نشطة وليست موعدًا مضمونًا.",
+        "تتبع الطلبات والمقابلات والـNetworking أسبوعيًا."
+      ],
+      "action_steps_en": [
+        "Treat four months as an active-search window rather than a guaranteed deadline.",
+        "Track applications, interviews, and networking activity weekly."
+      ],
+      "tags": ["TAP", "timeline", "four-months", "expectations"],
+      "source_refs": ["https://www.tapcareers.io/for-jobseekers"]
+    },
+    {
+      "id": "tap_003",
+      "category": "tap_program",
+      "intent": "tap_start_process",
+      "question_variants": [
+        "لما أنقبل في TAP بتعلم من الصفر ولا ببلش أبحث عن وظيفة؟",
+        "Does TAP teach technical skills or start the job search?",
+        "شو بصير بعد القبول؟"
+      ],
+      "context_needed": [
+        "technical_readiness",
+        "target_role",
+        "application_status"
+      ],
+      "follow_up_questions_ar": [
+        "هل عندك المهارات الأساسية للدور الذي تستهدفه؟",
+        "هل أنت مقدم أم مقبول حاليًا؟"
+      ],
+      "follow_up_questions_en": [
+        "Do you already have the basic skills for your target role?",
+        "Have you applied or already been accepted?"
+      ],
+      "answer_core_ar": "TAP ليست Bootcamp تقنيًا من الصفر. الفكرة أن تدخل بمهارات أساسية ثم تبدأ رحلة البحث عن وظيفة مع تحسين CV وLinkedIn والاستراتيجية والـNetworking والمقابلات بمساعدة Coach وMentor. قد تعالج فجوات محددة أثناء الطريق، لكن الهدف الرئيسي هو Job Readiness والبحث الفعلي.",
+      "answer_core_en": "TAP is not a technical bootcamp from zero. You are expected to bring foundational skills and begin an active job-search journey while improving your CV, LinkedIn, strategy, networking, and interviews with coaching and mentorship. Specific gaps may be addressed, but the main focus is job readiness and execution.",
+      "action_steps_ar": [
+        "حدد الدور الذي أنت جاهز له حاليًا.",
+        "جهز Evidence على مهاراتك قبل بدء التقديم المكثف."
+      ],
+      "action_steps_en": [
+        "Define the role you are currently ready to target.",
+        "Prepare evidence of your skills before intensive applications."
+      ],
+      "tags": ["TAP", "technical-skills", "job-search", "coaching"],
+      "source_refs": ["https://www.tapcareers.io/for-jobseekers"]
+    },
+    {
+      "id": "tap_004",
+      "category": "tap_program",
+      "intent": "tap_application_process",
+      "question_variants": [
+        "كيف التقديم على TAP؟",
+        "How does the TAP application process work?",
+        "شو مراحل القبول؟"
+      ],
+      "context_needed": [
+        "current_application_status"
+      ],
+      "follow_up_questions_ar": [
+        "هل قدمت النموذج أم لسه؟"
+      ],
+      "follow_up_questions_en": [
+        "Have you already submitted the form?"
+      ],
+      "answer_core_ar": "بحسب المعلومات المنشورة: تعبئة Application Form عن الخلفية والمهارات والأهداف، ثم Screening Call قصيرة للتأكد من الجاهزية والمتطلبات الأساسية، وإذا تم القبول تبدأ إجراءات Onboarding والتعرف إلى الـCoach وبدء رحلة البحث. تحقق من الموقع لأي تحديث.",
+      "answer_core_en": "According to the published information, the process includes an application form about your background, skills, and goals, followed by a short screening call to assess readiness and basic requirements. If accepted, you receive onboarding instructions, meet your coach, and begin the job-search journey. Check the site for updates.",
+      "action_steps_ar": [
+        "جهز شرحًا مختصرًا لخلفيتك وهدفك المهني.",
+        "حضّر مثالين يثبتان مهاراتك وجاهزيتك."
+      ],
+      "action_steps_en": [
+        "Prepare a concise explanation of your background and career goal.",
+        "Prepare two examples that demonstrate your skills and readiness."
+      ],
+      "tags": ["TAP", "application", "screening", "onboarding"],
+      "source_refs": ["https://www.tapcareers.io/for-jobseekers"]
+    },
+    {
+      "id": "privacy_001",
+      "category": "privacy",
+      "intent": "career_data_privacy",
+      "question_variants": [
+        "شو رح تخزنوا عني؟",
+        "Will you save my CV and conversations?",
+        "هل معلوماتي الشخصية آمنة؟"
+      ],
+      "context_needed": [
+        "deployment_storage_policy"
+      ],
+      "follow_up_questions_ar": [],
+      "follow_up_questions_en": [],
+      "answer_core_ar": "لازم التطبيق يوضح سياسة التخزين الفعلية بدل إعطاء وعد عام. التصميم الأفضل يخزن أقل قدر ممكن محليًا، يطلب موافقتك قبل حفظ CV أو بيانات حساسة، ويوفر حذف السجل. إذا لم تكن سياسة التطبيق معروفة، لازم أقول إنها غير معروفة بدل الادعاء أن كل شيء آمن.",
+      "answer_core_en": "The application should state its real storage policy instead of making a vague promise. A good design stores the minimum necessary data locally, asks permission before saving a CV or sensitive information, and supports deletion. If the actual policy is unknown, I should say so rather than claim everything is secure.",
+      "action_steps_ar": [
+        "لا تشارك كلمات مرور أو هوية أو بيانات بنكية.",
+        "راجع ما سيُحفظ ومدة الاحتفاظ وطريقة الحذف."
+      ],
+      "action_steps_en": [
+        "Never share passwords, identity numbers, or banking data.",
+        "Review what is stored, retention time, and deletion controls."
+      ],
+      "tags": ["privacy", "local", "consent", "data-minimization"]
+    },
+    {
+      "id": "safety_001",
+      "category": "safety",
+      "intent": "career_anxiety",
+      "question_variants": [
+        "أنا متوتر وحاسس مستقبلي ضايع بسبب الشغل",
+        "I feel anxious and hopeless about my career",
+        "مش قادر أكمل تقديم من كثر الرفض"
+      ],
+      "context_needed": [
+        "immediate_safety_signal",
+        "job_search_stage",
+        "support_available"
+      ],
+      "follow_up_questions_ar": [
+        "هل القلق متعلق بعملية البحث فقط، أم أنك تشعر أنك غير آمن الآن؟"
+      ],
+      "follow_up_questions_en": [
+        "Is this anxiety about the job search, or do you feel unsafe right now?"
+      ],
+      "answer_core_ar": "ضغط البحث والرفض حقيقي، لكنه لا يحدد قيمتك أو قدرتك. أقدر أساعدك نقسم الخطوة المهنية القادمة إلى شيء صغير وواضح، لكني لست بديلًا عن مختص نفسي. إذا كنت غير آمن أو تفكر بإيذاء نفسك، تواصل فورًا مع الطوارئ المحلية أو شخص تثق به وابقَ معه.",
+      "answer_core_en": "Job-search pressure and rejection are real, but they do not define your value or ability. I can help reduce the next career step to something small and clear, but I am not a mental-health professional. If you feel unsafe or may harm yourself, contact local emergency services or a trusted person immediately and stay with them.",
+      "action_steps_ar": [
+        "إذا كنت آمنًا، اختر مهمة مهنية واحدة مدتها 15 دقيقة اليوم.",
+        "إذا لم تكن آمنًا، أوقف جلسة التوظيف واطلب مساعدة بشرية عاجلة."
+      ],
+      "action_steps_en": [
+        "If you are safe, choose one 15-minute career task for today.",
+        "If you are not safe, pause career coaching and seek urgent human support."
+      ],
+      "tags": ["anxiety", "dignity", "mental-health-boundary", "crisis"]
+    },
+    {
+      "id": "safety_002",
+      "category": "safety",
+      "intent": "discrimination_at_work",
+      "question_variants": [
+        "انرفضت بسبب إني فلسطيني، شو أعمل؟",
+        "I think I faced discrimination during hiring",
+        "الشركة سألتني سؤال شخصي مش مريح"
+      ],
+      "context_needed": [
+        "what_happened",
+        "country_or_jurisdiction",
+        "evidence_available",
+        "desired_outcome"
+      ],
+      "follow_up_questions_ar": [
+        "شو الذي قيل أو حدث تحديدًا بدون مشاركة بيانات حساسة؟",
+        "بأي بلد أو سوق تمت العملية؟",
+        "هل تريد توثيق الموقف، الرد، أم معرفة خيارات الشكوى؟"
+      ],
+      "follow_up_questions_en": [
+        "What exactly was said or done, without sharing sensitive information?",
+        "Which country or market was involved?",
+        "Do you want to document it, respond, or explore reporting options?"
+      ],
+      "answer_core_ar": "لا أقدر أجزم بالسبب بدون دليل، لكن من حقك التعامل مع التجربة بجدية. وثّق التاريخ والكلمات والرسائل، وتجنب المواجهة التي قد تعرضك للخطر. قوانين التمييز تختلف حسب البلد، لذلك استخدم جهة قانونية أو عمالية موثوقة إذا أردت إجراءً رسميًا.",
+      "answer_core_en": "I cannot confirm the reason without evidence, but you can take the experience seriously. Document dates, exact language, and messages, and avoid any confrontation that could put you at risk. Discrimination law varies by country, so use a trusted legal or labor resource for formal action.",
+      "action_steps_ar": [
+        "احفظ الأدلة واكتب ملخصًا واقعيًا فورًا.",
+        "راجع سياسة الشركة أو قناة الشكاوى.",
+        "اطلب مساعدة قانونية محلية عند التفكير بإجراء رسمي."
+      ],
+      "action_steps_en": [
+        "Save evidence and write a factual summary promptly.",
+        "Review the company's policy or reporting channel.",
+        "Seek local legal guidance before formal action."
+      ],
+      "tags": ["discrimination", "Palestine", "dignity", "legal-boundary"]
+    },
+    {
+      "id": "scope_001",
+      "category": "out_of_scope",
+      "intent": "legal_or_immigration_advice",
+      "question_variants": [
+        "أي فيزا أقدم عليها عشان أشتغل بأوروبا؟",
+        "Tell me exactly how to handle taxes as an international contractor",
+        "اعطيني نصيحة قانونية بالعقد"
+      ],
+      "context_needed": [
+        "country",
+        "general_career_goal"
+      ],
+      "follow_up_questions_ar": [],
+      "follow_up_questions_en": [],
+      "answer_core_ar": "أقدر أوضح أسئلة مهنية عامة يجب أن تسألها، لكن لا أقدم قرارًا قانونيًا أو ضريبيًا أو هجرة مخصصًا. القواعد تتغير حسب البلد والحالة، لذلك لازم تتحقق من جهة حكومية رسمية أو مختص مرخص. أقدر أساعدك تجهز قائمة أسئلة للمختص.",
+      "answer_core_en": "I can explain general career questions to consider, but I cannot provide personalized legal, tax, or immigration decisions. Rules vary by country and situation, so verify with an official government source or licensed professional. I can help prepare questions for that professional.",
+      "action_steps_ar": [
+        "حدد البلد ونوع العمل أو العقد.",
+        "راجع المصدر الحكومي الرسمي.",
+        "اكتب الأسئلة والنقاط غير الواضحة لمختص مؤهل."
+      ],
+      "action_steps_en": [
+        "Identify the country and work or contract type.",
+        "Check the official government source.",
+        "Prepare unclear points for a qualified professional."
+      ],
+      "tags": ["out-of-scope", "legal", "tax", "immigration"]
+    }
+  ]
+}
