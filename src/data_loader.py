@@ -1,6 +1,8 @@
 """Knowledge-base loading and schema validation."""
 import json
 import math
+import re
+import string
 from pathlib import Path
 from typing import Any
 
@@ -283,3 +285,127 @@ def validate_readiness_rules(rules: dict[str, Any]) -> None:
     disclaimer = rules["disclaimer"]
     if not isinstance(disclaimer, dict) or not all(isinstance(disclaimer.get(language), str) and disclaimer[language].strip() for language in ("ar", "en")):
         raise ValueError("Readiness disclaimer must contain Arabic and English text.")
+
+SUPPORTED_AGENT_CONDITIONS = {
+    "normalized_job_query_is_not_empty",
+    "job_results_count > 0",
+    "job_results_count == 0",
+    "selected_job_id_is_valid",
+    "missing_required_skills_count > 0",
+    "missing_required_skills_count == 0",
+    "roadmap_or_generic_fallback_is_available",
+    "assessment_for_priority_skill_is_available",
+    "assessment_passed == true",
+    "assessment_passed == false",
+    "readiness_result_is_valid",
+    "readiness_status_id == 'ready_to_apply' and selected_job_url_is_valid",
+    "readiness_status_id in ['almost_ready', 'needs_preparation']",
+    "fast_matcher_answer_was_returned",
+    "validated_loader_error_exists",
+}
+
+def load_agent_flow(path: Path) -> dict[str, Any]:
+    """Load and validate the read-only TAP Companion flow definition."""
+    if not path.exists():
+        raise FileNotFoundError(f"Agent-flow file is missing: {path}")
+    def reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"Agent flow contains duplicate JSON key: {key}.")
+            result[key] = value
+        return result
+    try:
+        flow = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"Could not read agent flow: {exc}") from exc
+    validate_agent_flow(flow)
+    return flow
+
+def validate_agent_flow(flow: dict[str, Any]) -> None:
+    if not isinstance(flow, dict) or not isinstance(flow.get("flow_version"), str) or not flow["flow_version"].strip():
+        raise ValueError("Agent flow must be an object with flow_version.")
+    for field in ("agent", "runtime_rules", "journey", "context_bindings", "states", "actions", "transitions", "template_policy", "session_state", "fallbacks", "ui"):
+        if field not in flow:
+            raise ValueError(f"Agent flow is missing '{field}'.")
+    agent = flow["agent"]
+    if not isinstance(agent, dict) or not all(isinstance(agent.get(field), str) and agent[field].strip() for field in ("id", "name", "role_ar", "role_en")):
+        raise ValueError("Agent metadata is incomplete.")
+    runtime = flow["runtime_rules"]
+    prohibited = ("use_llm", "use_external_api", "use_database", "mutate_json_files", "persist_state_beyond_session", "allow_unresolved_placeholders", "invent_missing_values")
+    if not isinstance(runtime, dict) or any(runtime.get(rule) is not False for rule in prohibited):
+        raise ValueError("Agent runtime rules must prohibit models, external state, mutation, unresolved placeholders, and invented values.")
+    journey = flow["journey"]
+    stages, order = journey.get("stages"), journey.get("stage_order")
+    if not isinstance(stages, dict) or not stages or not isinstance(order, list):
+        raise ValueError("Agent journey must define stages and stage_order.")
+    indices: set[int] = set()
+    for stage_id, stage in stages.items():
+        if not isinstance(stage_id, str) or not stage_id or not isinstance(stage, dict):
+            raise ValueError("Agent stage IDs and definitions must be valid.")
+        index = stage.get("index")
+        if not isinstance(index, int) or index in indices:
+            raise ValueError(f"Duplicate or invalid agent stage index: {index}.")
+        indices.add(index)
+        if not all(isinstance(stage.get(f"label_{language}"), str) and stage[f"label_{language}"].strip() for language in ("ar", "en")):
+            raise ValueError(f"Agent stage '{stage_id}' needs Arabic and English labels.")
+    expected_order = [stage_id for stage_id, _ in sorted(stages.items(), key=lambda item: item[1]["index"])]
+    if order != expected_order or set(order) != set(stages):
+        raise ValueError("Agent stage_order must match unique stage indices.")
+    actions = flow["actions"]
+    if not isinstance(actions, dict):
+        raise ValueError("Agent actions must be an object.")
+    for action_id, action in actions.items():
+        if not isinstance(action, dict) or not all(isinstance(action.get(f"label_{language}"), str) and action[f"label_{language}"].strip() for language in ("ar", "en")):
+            raise ValueError(f"Agent action '{action_id}' needs bilingual labels.")
+    policy = flow["template_policy"]
+    allowed_list = policy.get("allowed_placeholders") if isinstance(policy, dict) else None
+    if not isinstance(allowed_list, list) or len(allowed_list) != len(set(allowed_list)) or not all(isinstance(value, str) and value for value in allowed_list):
+        raise ValueError("Agent allowed placeholders must be a unique string list.")
+    allowed = set(allowed_list)
+    states = flow["states"]
+    if not isinstance(states, list) or not states:
+        raise ValueError("Agent states must be a non-empty list.")
+    state_ids: set[str] = set()
+    formatter = string.Formatter()
+    for state in states:
+        state_id = state.get("id") if isinstance(state, dict) else None
+        if not isinstance(state_id, str) or not state_id or state_id in state_ids:
+            raise ValueError(f"Duplicate or invalid agent state id: {state_id}.")
+        state_ids.add(state_id)
+        if state.get("stage") not in stages:
+            raise ValueError(f"Agent state '{state_id}' references an invalid stage.")
+        action_id = state.get("primary_action")
+        if action_id is not None and action_id not in actions:
+            raise ValueError(f"Agent state '{state_id}' references invalid action '{action_id}'.")
+        required = state.get("required_context")
+        if not isinstance(required, list) or not set(required) <= allowed:
+            raise ValueError(f"Agent state '{state_id}' required_context contains an unknown placeholder.")
+        for language in ("ar", "en"):
+            for prefix in ("message", "fallback_message"):
+                field = f"{prefix}_{language}"
+                template = state.get(field)
+                if not isinstance(template, str) or not template.strip():
+                    raise ValueError(f"Agent state '{state_id}' is missing '{field}'.")
+                try:
+                    placeholders = {name for _, name, _, _ in formatter.parse(template) if name is not None}
+                except ValueError as exc:
+                    raise ValueError(f"Agent state '{state_id}' has a malformed template in '{field}'.") from exc
+                unknown = placeholders - allowed
+                if unknown:
+                    raise ValueError(f"Agent state '{state_id}' uses unknown placeholders: {', '.join(sorted(unknown))}.")
+    initial = flow["session_state"].get("initial_state") if isinstance(flow["session_state"], dict) else None
+    if initial not in state_ids:
+        raise ValueError("Agent initial_state references an unknown state.")
+    transitions = flow["transitions"]
+    if not isinstance(transitions, list):
+        raise ValueError("Agent transitions must be a list.")
+    for transition in transitions:
+        if not isinstance(transition, dict) or not isinstance(transition.get("from"), list):
+            raise ValueError("Each agent transition must be an object with a from list.")
+        invalid_from = set(transition["from"]) - state_ids - {"$any"}
+        target = transition.get("to")
+        if invalid_from or target not in state_ids | {"$same_state"}:
+            raise ValueError("Agent transition references an invalid state or pseudo-state.")
+        if transition.get("condition") not in SUPPORTED_AGENT_CONDITIONS:
+            raise ValueError(f"Agent transition uses unsupported condition '{transition.get('condition')}'.")

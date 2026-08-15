@@ -12,6 +12,15 @@ A lightweight local Arabic-English career chatbot for Palestine and the wider ME
 - Immediate clarification for questions that are not covered by the knowledge base.
 - Local Job Finder over `data/jobs.json`: searches 20 bilingual demo opportunities and shows the best three application cards.
 - Deterministic job-specific Skill Gap Analysis, bilingual learning roadmaps, three-question skill verification, and Final Job Readiness in the same chat flow.
+- A bilingual TAP Companion that guides the real journey state from profile through discovery, matching, learning, verification, and application.
+
+## TAP Companion
+
+The chat remains the primary interaction area. Beside it, the TAP Companion reads the actual session profile, current job results, selected job, skill gaps, roadmaps, submitted assessments, and readiness result. Its state machine and localized templates come from the validated, read-only `data/agent_flow.json`; `src/career_agent.py` applies only a finite set of allowed transitions and never evaluates JSON expressions.
+
+Select a job from its existing result card, then use the Companion's real actions to analyze the gap, open that job's roadmap, start the priority-skill assessment, calculate readiness, and continue toward the supplied application link. Changing jobs clears only the previous job's downstream session values. General career questions still receive the normal FastMatcher answer and do not replace or reset the journey.
+
+The right-side card uses `assets/tap_companion.png` at a compact display size and falls back to the flow's compass visual if that asset is unavailable. The layout stacks the Companion above chat on narrow screens, supports Arabic RTL and English LTR, uses text/icons as well as color for journey status, and respects reduced-motion preferences. No model, API, database, or network call powers this feature.
 
 ## Architecture and privacy
 
@@ -57,4 +66,4 @@ The jobs are local demo data only. Every Apply button uses the supplied `.exampl
 
 `data/demo_user_profile.json` is a fictional hackathon profile, loaded read-only at startup. It is shown as a compact sidebar summary without its email. Only target role, experience, skills, city/country, and work preferences affect local job ranking; identity fields never do. If it is unavailable, search still works from the typed request alone.
 
-All supplied JSON catalogues are demo data loaded read-only. `data/demo_scenarios.json` is a manual QA/presentation checklist only and is never loaded by the runtime chat path. See `DEMO_GUIDE.md` for the verified five-minute walkthrough.
+All supplied JSON catalogues, including `data/agent_flow.json`, are demo data loaded read-only. `data/demo_scenarios.json` is a manual QA/presentation checklist only and is never loaded by the runtime chat path. See `DEMO_GUIDE.md` for the verified five-minute walkthrough.

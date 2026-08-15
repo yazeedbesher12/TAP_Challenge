@@ -1,0 +1,675 @@
+{
+  "flow_version": "1.0",
+  "flow_type": "context_aware_deterministic_career_agent",
+  "agent": {
+    "id": "tap_companion",
+    "name": "TAP Companion",
+    "role_ar": "رفيقك في الرحلة المهنية",
+    "role_en": "Your career journey companion",
+    "asset_path": "assets/tap_companion.png",
+    "default_language": "mixed",
+    "never_claims": [
+      "autonomous_hiring_decisions",
+      "professional_certification",
+      "guaranteed_employment",
+      "live_job_market_access"
+    ]
+  },
+  "runtime_rules": {
+    "use_llm": false,
+    "use_external_api": false,
+    "use_database": false,
+    "mutate_json_files": false,
+    "persist_state_beyond_session": false,
+    "allow_unresolved_placeholders": false,
+    "invent_missing_values": false,
+    "max_displayed_jobs": 3,
+    "max_displayed_strengths": 3,
+    "max_displayed_gaps": 3,
+    "max_active_roadmaps": 2
+  },
+  "sources": {
+    "profile": {
+      "source_role": "demo_user_profile",
+      "path_resolution": "existing_project_config",
+      "read_only": true
+    },
+    "jobs": {
+      "source_role": "local_jobs_catalog",
+      "path_resolution": "existing_project_config",
+      "read_only": true
+    },
+    "career_qa": {
+      "source_role": "validated_career_knowledge_base",
+      "path_resolution": "existing_project_config",
+      "read_only": true
+    },
+    "learning_resources": {
+      "source_role": "skill_gap_roadmaps",
+      "path_resolution": "existing_project_config",
+      "read_only": true
+    },
+    "skill_assessments": {
+      "source_role": "skill_verification_questions",
+      "path_resolution": "existing_project_config",
+      "read_only": true
+    },
+    "readiness_rules": {
+      "source_role": "final_readiness_calculation",
+      "path_resolution": "existing_project_config",
+      "read_only": true
+    },
+    "demo_scenarios": {
+      "source_role": "qa_only",
+      "load_during_runtime": false,
+      "read_only": true
+    }
+  },
+  "journey": {
+    "stage_order": [
+      "profile",
+      "discover",
+      "match",
+      "skill_gap",
+      "learn",
+      "verify",
+      "apply"
+    ],
+    "stages": {
+      "profile": {
+        "index": 0,
+        "label_ar": "ملفي",
+        "label_en": "Profile",
+        "icon": "👤"
+      },
+      "discover": {
+        "index": 1,
+        "label_ar": "اكتشاف",
+        "label_en": "Discover",
+        "icon": "🔎"
+      },
+      "match": {
+        "index": 2,
+        "label_ar": "مطابقة",
+        "label_en": "Match",
+        "icon": "🎯"
+      },
+      "skill_gap": {
+        "index": 3,
+        "label_ar": "فجوة المهارات",
+        "label_en": "Skill Gap",
+        "icon": "🧩"
+      },
+      "learn": {
+        "index": 4,
+        "label_ar": "تطوير",
+        "label_en": "Learn",
+        "icon": "📘"
+      },
+      "verify": {
+        "index": 5,
+        "label_ar": "تحقق",
+        "label_en": "Verify",
+        "icon": "✅"
+      },
+      "apply": {
+        "index": 6,
+        "label_ar": "تقديم",
+        "label_en": "Apply",
+        "icon": "🚀"
+      }
+    }
+  },
+  "context_bindings": {
+    "target_role": {
+      "source": "profile.target_role_or_first_target_role",
+      "formatter": "safe_text"
+    },
+    "top_skills": {
+      "source": "profile.skills",
+      "formatter": "localized_list",
+      "limit": 3
+    },
+    "preferred_work_type": {
+      "source": "profile.preferred_work_type",
+      "formatter": "safe_text"
+    },
+    "jobs_count": {
+      "source": "current_job_results.length",
+      "formatter": "integer"
+    },
+    "top_job_title": {
+      "source": "current_job_results[0].title",
+      "formatter": "safe_text"
+    },
+    "top_job_match_score": {
+      "source": "current_job_results[0].match_score",
+      "formatter": "percentage"
+    },
+    "selected_job_title": {
+      "source": "selected_job.title",
+      "formatter": "safe_text"
+    },
+    "selected_company": {
+      "source": "selected_job.company",
+      "formatter": "safe_text"
+    },
+    "job_match_score": {
+      "source": "selected_job_match.match_score",
+      "formatter": "percentage"
+    },
+    "matched_skills": {
+      "source": "selected_job_match.matched_skills",
+      "formatter": "localized_list",
+      "limit": 3
+    },
+    "missing_required_skills": {
+      "source": "selected_job_match.missing_required_skills",
+      "formatter": "localized_list",
+      "limit": 3
+    },
+    "priority_skill": {
+      "source": "selected_roadmaps[0].skill",
+      "formatter": "safe_text"
+    },
+    "roadmap_hours": {
+      "source": "selected_roadmaps[0].estimated_hours",
+      "formatter": "integer"
+    },
+    "assessment_skill": {
+      "source": "latest_assessment.skill",
+      "formatter": "safe_text"
+    },
+    "assessment_correct": {
+      "source": "latest_assessment.correct_answers",
+      "formatter": "integer"
+    },
+    "assessment_total": {
+      "source": "latest_assessment.total_questions",
+      "formatter": "integer"
+    },
+    "assessment_percentage": {
+      "source": "latest_assessment.percentage",
+      "formatter": "percentage"
+    },
+    "readiness_score": {
+      "source": "current_readiness.score",
+      "formatter": "percentage"
+    },
+    "readiness_status": {
+      "source": "current_readiness.localized_status_label",
+      "formatter": "safe_text"
+    },
+    "next_action": {
+      "source": "current_readiness.localized_action_label",
+      "formatter": "safe_text"
+    }
+  },
+  "states": [
+    {
+      "id": "profile_loaded",
+      "stage": "profile",
+      "visual_state": "welcome",
+      "required_context": ["target_role", "top_skills"],
+      "message_ar": "قرأت ملفك. أنت تستهدف {target_role}، ومن أبرز مهاراتك {top_skills}. أخبرني عن الوظيفة التي تريد الوصول إليها.",
+      "message_en": "I have reviewed your profile. You are targeting {target_role}, and your key skills include {top_skills}. Tell me which job you want to pursue.",
+      "fallback_message_ar": "قرأت ملف الديمو وأصبحت جاهزاً لمساعدتك في البحث عن فرصة مناسبة.",
+      "fallback_message_en": "I have loaded the demo profile and I am ready to help you find a suitable opportunity.",
+      "primary_action": "focus_chat_input"
+    },
+    {
+      "id": "discovering",
+      "stage": "discover",
+      "visual_state": "searching",
+      "required_context": [],
+      "message_ar": "سأقارن طلبك مع الفرص المحلية المتاحة وملفك الحالي.",
+      "message_en": "I will compare your request with the available local opportunities and your current profile.",
+      "fallback_message_ar": "أبحث الآن داخل فرص الديمو المحلية.",
+      "fallback_message_en": "I am searching the local demo opportunities now.",
+      "primary_action": null
+    },
+    {
+      "id": "opportunities_found",
+      "stage": "discover",
+      "visual_state": "opportunities",
+      "required_context": ["jobs_count", "top_job_title", "top_job_match_score"],
+      "message_ar": "وجدت {jobs_count} فرص مناسبة أو مرتبطة. أقرب فرصة هي {top_job_title} بنسبة مطابقة {top_job_match_score}.",
+      "message_en": "I found {jobs_count} suitable or related opportunities. The closest match is {top_job_title} with a {top_job_match_score} match.",
+      "fallback_message_ar": "وجدت فرصاً مرتبطة بطلبك. اختر واحدة حتى أحللها مع ملفك.",
+      "fallback_message_en": "I found opportunities related to your request. Select one so I can analyze it against your profile.",
+      "primary_action": "select_job"
+    },
+    {
+      "id": "clarification_needed",
+      "stage": "discover",
+      "visual_state": "clarifying",
+      "required_context": [],
+      "message_ar": "حتى أبحث بدقة، حدّد المسمى المستهدف أو مستوى الخبرة أو المشكلة المهنية التي تريد حلها.",
+      "message_en": "To search accurately, specify your target role, experience level, or the career problem you want to solve.",
+      "fallback_message_ar": "أحتاج تفاصيل إضافية قصيرة حتى أساعدك.",
+      "fallback_message_en": "I need a little more detail to help you.",
+      "primary_action": "focus_chat_input"
+    },
+    {
+      "id": "job_selected",
+      "stage": "match",
+      "visual_state": "matching",
+      "required_context": ["selected_job_title", "job_match_score", "matched_skills"],
+      "message_ar": "اخترت {selected_job_title}. نسبة المطابقة {job_match_score}، وأبرز نقاط قوتك لهذه الفرصة هي {matched_skills}.",
+      "message_en": "You selected {selected_job_title}. Your match is {job_match_score}, and your strongest relevant skills are {matched_skills}.",
+      "fallback_message_ar": "تم اختيار الوظيفة. سأحلل المهارات المطلوبة مقارنة بملفك.",
+      "fallback_message_en": "The job is selected. I will compare its required skills with your profile.",
+      "primary_action": "analyze_skill_gap"
+    },
+    {
+      "id": "gap_analyzed",
+      "stage": "skill_gap",
+      "visual_state": "gap_alert",
+      "required_context": ["missing_required_skills", "priority_skill"],
+      "message_ar": "أهم المهارات المطلوبة التي تحتاج إلى تطويرها هي {missing_required_skills}. سنبدأ بـ{priority_skill} لأنها الأعلى أولوية لهذه الفرصة.",
+      "message_en": "The main required skills to develop are {missing_required_skills}. We will start with {priority_skill} because it has the highest priority for this opportunity.",
+      "fallback_message_ar": "ظهرت فجوة مهارية مطلوبة. سأعرض أفضل خطة متاحة لها.",
+      "fallback_message_en": "A required skill gap was identified. I will show the best available roadmap for it.",
+      "primary_action": "open_roadmap"
+    },
+    {
+      "id": "no_required_gaps",
+      "stage": "skill_gap",
+      "visual_state": "gap_clear",
+      "required_context": ["selected_job_title"],
+      "message_ar": "لا توجد فجوات أساسية ظاهرة بين ملفك ومتطلبات {selected_job_title}. يمكننا الانتقال مباشرة إلى تقييم الجاهزية.",
+      "message_en": "No major required-skill gaps are visible between your profile and {selected_job_title}. We can move directly to readiness evaluation.",
+      "fallback_message_ar": "لا توجد فجوات أساسية ظاهرة. ننتقل إلى الجاهزية.",
+      "fallback_message_en": "No major required gaps are visible. We can move to readiness.",
+      "primary_action": "calculate_readiness"
+    },
+    {
+      "id": "roadmap_ready",
+      "stage": "learn",
+      "visual_state": "learning",
+      "required_context": ["priority_skill", "roadmap_hours"],
+      "message_ar": "جهزت لك خطة {priority_skill} بمدة تقديرية {roadmap_hours} ساعات: تعلّم، طبّق، قيّم، ثم أضف الدليل إلى ملف أعمالك.",
+      "message_en": "I prepared a {priority_skill} roadmap with an estimated duration of {roadmap_hours} hours: learn, build, evaluate, then add the evidence to your portfolio.",
+      "fallback_message_ar": "جهزت لك أفضل خطة متاحة للفجوة الحالية.",
+      "fallback_message_en": "I prepared the best available roadmap for the current gap.",
+      "primary_action": "start_assessment"
+    },
+    {
+      "id": "assessment_pending",
+      "stage": "verify",
+      "visual_state": "assessment",
+      "required_context": ["priority_skill"],
+      "message_ar": "بعد مراجعة خطة {priority_skill}، أجب عن الاختبار القصير حتى نحدّث تقييم جاهزيتك.",
+      "message_en": "After reviewing the {priority_skill} roadmap, complete the short assessment so we can update your readiness evaluation.",
+      "fallback_message_ar": "أكمل الاختبار القصير حتى نتحقق من الجاهزية.",
+      "fallback_message_en": "Complete the short assessment so we can verify readiness.",
+      "primary_action": "submit_assessment"
+    },
+    {
+      "id": "assessment_passed",
+      "stage": "verify",
+      "visual_state": "assessment_passed",
+      "required_context": ["assessment_skill", "assessment_correct", "assessment_total", "assessment_percentage"],
+      "message_ar": "أحسنت. اجتزت اختبار {assessment_skill} بنتيجة {assessment_correct}/{assessment_total}، أي {assessment_percentage}.",
+      "message_en": "Well done. You passed the {assessment_skill} assessment with {assessment_correct}/{assessment_total}, or {assessment_percentage}.",
+      "fallback_message_ar": "اجتزت الاختبار القصير. سأحسب جاهزيتك الآن.",
+      "fallback_message_en": "You passed the short assessment. I will calculate your readiness now.",
+      "primary_action": "calculate_readiness"
+    },
+    {
+      "id": "assessment_failed",
+      "stage": "verify",
+      "visual_state": "assessment_needs_practice",
+      "required_context": ["assessment_skill", "assessment_correct", "assessment_total", "assessment_percentage"],
+      "message_ar": "نتيجتك في {assessment_skill} هي {assessment_correct}/{assessment_total}، أي {assessment_percentage}. ارجع لخطة نفس المهارة ثم أعد الاختبار.",
+      "message_en": "Your {assessment_skill} result is {assessment_correct}/{assessment_total}, or {assessment_percentage}. Return to the same skill roadmap, then retake the assessment.",
+      "fallback_message_ar": "تحتاج هذه المهارة إلى تدريب إضافي قبل إعادة الاختبار.",
+      "fallback_message_en": "This skill needs more practice before you retake the assessment.",
+      "primary_action": "review_current_roadmap"
+    },
+    {
+      "id": "readiness_ready",
+      "stage": "verify",
+      "visual_state": "readiness",
+      "required_context": ["readiness_score", "readiness_status", "next_action"],
+      "message_ar": "جاهزيتك الحالية {readiness_score}: {readiness_status}. الخطوة الأنسب الآن هي {next_action}.",
+      "message_en": "Your current readiness is {readiness_score}: {readiness_status}. Your best next step is {next_action}.",
+      "fallback_message_ar": "تم حساب الجاهزية. راجع النتيجة والخطوة المقترحة.",
+      "fallback_message_en": "Readiness has been calculated. Review the result and recommended action.",
+      "primary_action": "follow_readiness_action"
+    },
+    {
+      "id": "apply_ready",
+      "stage": "apply",
+      "visual_state": "celebrating",
+      "required_context": ["selected_job_title", "selected_company"],
+      "message_ar": "وصلت إلى مرحلة التقديم على {selected_job_title} لدى {selected_company}. راجع الوصف للمرة الأخيرة ثم افتح رابط الفرصة عندما تكون جاهزاً.",
+      "message_en": "You reached the application stage for {selected_job_title} at {selected_company}. Review the description once more, then open the opportunity link when ready.",
+      "fallback_message_ar": "وصلت إلى مرحلة التقديم. افتح رابط الفرصة عندما تكون جاهزاً.",
+      "fallback_message_en": "You reached the application stage. Open the opportunity link when ready.",
+      "primary_action": "view_job_link"
+    },
+    {
+      "id": "data_unavailable",
+      "stage": "profile",
+      "visual_state": "safe_fallback",
+      "required_context": [],
+      "message_ar": "تعذر تحميل جزء من بيانات الديمو. سأبقي المحادثة متاحة دون اختراع معلومات غير موجودة.",
+      "message_en": "Part of the demo data could not be loaded. I will keep the chat available without inventing missing information.",
+      "fallback_message_ar": "بعض البيانات غير متاحة حالياً.",
+      "fallback_message_en": "Some data is currently unavailable.",
+      "primary_action": "retry_data_load"
+    }
+  ],
+  "actions": {
+    "focus_chat_input": {"label_ar": "اكتب هدفك المهني", "label_en": "Enter Your Career Goal"},
+    "select_job": {"label_ar": "اختر فرصة", "label_en": "Select an Opportunity"},
+    "analyze_skill_gap": {"label_ar": "حلّل فجوة المهارات", "label_en": "Analyze Skill Gap"},
+    "open_roadmap": {"label_ar": "افتح خطة التطوير", "label_en": "Open Learning Roadmap"},
+    "start_assessment": {"label_ar": "اختبر مهاراتي", "label_en": "Test My Skills"},
+    "submit_assessment": {"label_ar": "إرسال الإجابات", "label_en": "Submit Answers"},
+    "calculate_readiness": {"label_ar": "احسب جاهزيتي", "label_en": "Calculate My Readiness"},
+    "review_current_roadmap": {"label_ar": "راجع خطة المهارة", "label_en": "Review Skill Roadmap"},
+    "follow_readiness_action": {"label_ar": "نفّذ الخطوة التالية", "label_en": "Continue to Next Step"},
+    "view_job_link": {"label_ar": "عرض الوظيفة والتقديم", "label_en": "View Job and Apply"},
+    "retry_data_load": {"label_ar": "إعادة المحاولة", "label_en": "Retry"},
+    "continue_journey": {"label_ar": "متابعة رحلتي المهنية", "label_en": "Continue My Career Journey"}
+  },
+  "transitions": [
+    {
+      "from": ["profile_loaded", "clarification_needed"],
+      "event": "job_search_intent_detected",
+      "condition": "normalized_job_query_is_not_empty",
+      "to": "discovering",
+      "reset": ["job_results", "selected_job", "skill_gap", "roadmaps", "assessment_results", "readiness_result"]
+    },
+    {
+      "from": ["discovering"],
+      "event": "job_search_completed",
+      "condition": "job_results_count > 0",
+      "to": "opportunities_found",
+      "reset": []
+    },
+    {
+      "from": ["discovering"],
+      "event": "job_search_completed",
+      "condition": "job_results_count == 0",
+      "to": "clarification_needed",
+      "reset": ["selected_job", "skill_gap", "roadmaps", "assessment_results", "readiness_result"]
+    },
+    {
+      "from": ["opportunities_found", "job_selected", "gap_analyzed", "no_required_gaps", "roadmap_ready", "assessment_pending", "assessment_passed", "assessment_failed", "readiness_ready", "apply_ready"],
+      "event": "job_selected_or_changed",
+      "condition": "selected_job_id_is_valid",
+      "to": "job_selected",
+      "reset": ["skill_gap", "roadmaps", "assessment_results", "readiness_result"]
+    },
+    {
+      "from": ["job_selected"],
+      "event": "skill_gap_calculated",
+      "condition": "missing_required_skills_count > 0",
+      "to": "gap_analyzed",
+      "reset": ["roadmaps", "assessment_results", "readiness_result"]
+    },
+    {
+      "from": ["job_selected"],
+      "event": "skill_gap_calculated",
+      "condition": "missing_required_skills_count == 0",
+      "to": "no_required_gaps",
+      "reset": ["roadmaps", "assessment_results", "readiness_result"]
+    },
+    {
+      "from": ["gap_analyzed", "assessment_failed"],
+      "event": "roadmap_opened",
+      "condition": "roadmap_or_generic_fallback_is_available",
+      "to": "roadmap_ready",
+      "reset": []
+    },
+    {
+      "from": ["roadmap_ready"],
+      "event": "assessment_started",
+      "condition": "assessment_for_priority_skill_is_available",
+      "to": "assessment_pending",
+      "reset": ["latest_assessment", "readiness_result"]
+    },
+    {
+      "from": ["assessment_pending"],
+      "event": "assessment_submitted",
+      "condition": "assessment_passed == true",
+      "to": "assessment_passed",
+      "reset": ["readiness_result"]
+    },
+    {
+      "from": ["assessment_pending"],
+      "event": "assessment_submitted",
+      "condition": "assessment_passed == false",
+      "to": "assessment_failed",
+      "reset": ["readiness_result"]
+    },
+    {
+      "from": ["no_required_gaps", "assessment_passed", "assessment_failed"],
+      "event": "readiness_calculated",
+      "condition": "readiness_result_is_valid",
+      "to": "readiness_ready",
+      "reset": []
+    },
+    {
+      "from": ["readiness_ready"],
+      "event": "readiness_action_requested",
+      "condition": "readiness_status_id == 'ready_to_apply' and selected_job_url_is_valid",
+      "to": "apply_ready",
+      "reset": []
+    },
+    {
+      "from": ["readiness_ready"],
+      "event": "readiness_action_requested",
+      "condition": "readiness_status_id in ['almost_ready', 'needs_preparation']",
+      "to": "gap_analyzed",
+      "reset": []
+    },
+    {
+      "from": ["profile_loaded", "opportunities_found", "job_selected", "gap_analyzed", "no_required_gaps", "roadmap_ready", "assessment_pending", "assessment_passed", "assessment_failed", "readiness_ready", "apply_ready"],
+      "event": "general_career_question_answered",
+      "condition": "fast_matcher_answer_was_returned",
+      "to": "$same_state",
+      "reset": []
+    },
+    {
+      "from": ["$any"],
+      "event": "required_runtime_data_failed",
+      "condition": "validated_loader_error_exists",
+      "to": "data_unavailable",
+      "reset": []
+    }
+  ],
+  "decision_rules": [
+    {
+      "priority": 1,
+      "id": "career_qa_does_not_break_journey",
+      "when": "message_has_valid_fast_matcher_answer and not job_search_intent",
+      "action": "return_fast_matcher_answer_and_preserve_current_agent_state"
+    },
+    {
+      "priority": 2,
+      "id": "job_search_uses_profile_context",
+      "when": "job_search_intent",
+      "action": "run_existing_job_matcher_with_query_and_loaded_profile"
+    },
+    {
+      "priority": 3,
+      "id": "no_job_result_requires_clarification",
+      "when": "job_results_count == 0",
+      "action": "request_target_role_experience_or_specific_problem"
+    },
+    {
+      "priority": 4,
+      "id": "required_gaps_before_optional_gaps",
+      "when": "missing_required_skills_count > 0",
+      "action": "prioritize_required_skills_using_existing_gap_order"
+    },
+    {
+      "priority": 5,
+      "id": "skip_training_when_no_required_gap",
+      "when": "missing_required_skills_count == 0",
+      "action": "skip_roadmap_and_assessment_and_calculate_readiness"
+    },
+    {
+      "priority": 6,
+      "id": "roadmap_uses_alias_matching",
+      "when": "priority_missing_skill_exists",
+      "action": "find_learning_resource_by_normalized_name_or_alias_then_use_generic_fallback"
+    },
+    {
+      "priority": 7,
+      "id": "assessment_matches_current_gap",
+      "when": "assessment_requested",
+      "action": "load_questions_only_for_current_priority_missing_skill"
+    },
+    {
+      "priority": 8,
+      "id": "readiness_uses_external_rules_file",
+      "when": "readiness_requested",
+      "action": "calculate_using_validated_readiness_rules_and_current_job_assessment_results"
+    },
+    {
+      "priority": 9,
+      "id": "job_change_invalidates_downstream_context",
+      "when": "new_selected_job_id != previous_selected_job_id",
+      "action": "clear_gap_roadmap_assessment_and_readiness_for_previous_job"
+    },
+    {
+      "priority": 10,
+      "id": "never_invent_missing_context",
+      "when": "template_context_is_missing_or_invalid",
+      "action": "use_localized_state_fallback_message"
+    }
+  ],
+  "template_policy": {
+    "placeholder_pattern": "\\{[a-z_]+\\}",
+    "allowed_placeholders": [
+      "target_role",
+      "top_skills",
+      "preferred_work_type",
+      "jobs_count",
+      "top_job_title",
+      "top_job_match_score",
+      "selected_job_title",
+      "selected_company",
+      "job_match_score",
+      "matched_skills",
+      "missing_required_skills",
+      "priority_skill",
+      "roadmap_hours",
+      "assessment_skill",
+      "assessment_correct",
+      "assessment_total",
+      "assessment_percentage",
+      "readiness_score",
+      "readiness_status",
+      "next_action"
+    ],
+    "missing_value_behavior": "use_state_fallback_message",
+    "escape_html": true,
+    "empty_list_behavior": "use_state_fallback_message",
+    "percentage_range": [0, 100]
+  },
+  "ui": {
+    "layout": {
+      "desktop": "chat_left_companion_right",
+      "chat_width_ratio": 0.68,
+      "companion_width_ratio": 0.32,
+      "mobile": "companion_above_chat",
+      "sticky_companion_card": true
+    },
+    "companion_card": {
+      "show_agent_image": true,
+      "show_current_stage": true,
+      "show_progress": true,
+      "show_contextual_message": true,
+      "show_primary_action": true,
+      "show_data_source_badges": false,
+      "image_alt_ar": "شخصية TAP المرافقة للرحلة المهنية",
+      "image_alt_en": "TAP career journey companion"
+    },
+    "journey_track": {
+      "show_all_stages": true,
+      "move_agent_marker": true,
+      "animation_css": "transform 600ms ease, left 600ms ease",
+      "completed_color": "#16A3A8",
+      "active_color": "#0B5E8E",
+      "pending_color": "#D9E4EA",
+      "background_color": "#F4F8FA",
+      "never_use_color": "red"
+    },
+    "visual_state_badges": {
+      "welcome": "👋",
+      "searching": "🔎",
+      "opportunities": "💼",
+      "clarifying": "💬",
+      "matching": "🎯",
+      "gap_alert": "🧩",
+      "gap_clear": "✨",
+      "learning": "📘",
+      "assessment": "📝",
+      "assessment_passed": "✅",
+      "assessment_needs_practice": "🔁",
+      "readiness": "📊",
+      "celebrating": "🚀",
+      "safe_fallback": "ℹ️"
+    },
+    "accessibility": {
+      "respect_reduced_motion": true,
+      "minimum_contrast": "WCAG_AA",
+      "keyboard_accessible_actions": true,
+      "do_not_use_color_as_only_signal": true
+    }
+  },
+  "session_state": {
+    "namespace": "tap_agent",
+    "keys": [
+      "current_state",
+      "current_stage",
+      "current_job_results",
+      "selected_job_id",
+      "selected_job_match",
+      "selected_roadmaps",
+      "assessment_results_by_job",
+      "readiness_result_by_job",
+      "last_agent_message_signature"
+    ],
+    "initial_state": "profile_loaded",
+    "deduplicate_messages_by_signature": true,
+    "isolate_results_by_job_id": true
+  },
+  "fallbacks": {
+    "missing_agent_asset": {
+      "ar": "TAP Companion",
+      "en": "TAP Companion",
+      "visual": "🧭"
+    },
+    "missing_profile": {
+      "state": "data_unavailable",
+      "allow_general_career_qa": true,
+      "allow_personalized_job_matching": false
+    },
+    "missing_jobs_catalog": {
+      "state": "data_unavailable",
+      "allow_general_career_qa": true,
+      "allow_personalized_job_matching": false
+    },
+    "missing_learning_resource": {
+      "action": "use_learning_resources_generic_fallback",
+      "do_not_block_assessment": true
+    },
+    "missing_assessment": {
+      "message_ar": "لا يوجد اختبار جاهز لهذه المهارة في نسخة الديمو.",
+      "message_en": "No assessment is available for this skill in the demo.",
+      "do_not_invent_questions": true
+    },
+    "missing_job_url": {
+      "message_ar": "رابط الوظيفة غير متوفر في نسخة الديمو.",
+      "message_en": "The job link is unavailable in the demo.",
+      "hide_link_action": true
+    }
+  }
+}

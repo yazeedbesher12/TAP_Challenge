@@ -3,15 +3,16 @@ import html
 import re
 from typing import Any
 import streamlit as st
-from src.config import DEMO_PROFILE_PATH, FAST_MATCH_THRESHOLD, JOBS_PATH, KB_PATH, LEARNING_RESOURCES_PATH, MEMORY_PATH, READINESS_RULES_PATH, SKILL_ASSESSMENTS_PATH
-from src.data_loader import load_demo_profile, load_knowledge_base, load_learning_resources, load_readiness_rules, load_skill_assessments
+from src.config import AGENT_FLOW_PATH, COMPANION_ASSET_PATH, DEMO_PROFILE_PATH, FAST_MATCH_THRESHOLD, JOBS_PATH, KB_PATH, LEARNING_RESOURCES_PATH, MEMORY_PATH, READINESS_RULES_PATH, SKILL_ASSESSMENTS_PATH
+from src.data_loader import load_agent_flow, load_demo_profile, load_knowledge_base, load_learning_resources, load_readiness_rules, load_skill_assessments
 from src.language import detect_language, text_direction
 from src.memory import delete_saved_data, empty_profile, load_saved_data, save_data
 from src.fast_matcher import FastMatcher, instant_answer
 from src.job_search import JobSearchIndex, LocalJobProvider, is_job_search_intent, is_underspecified_job_request
 from src.learning_roadmap import build_skill_roadmaps
-from src.skill_assessment import assessment_questions, calculate_assessment_result, select_assessment_skills
+from src.skill_assessment import assessment_questions, calculate_assessment_result, find_skill_assessment, select_assessment_skills
 from src.readiness import calculate_readiness
+from src.career_agent import build_agent_context, build_message_signature, get_companion_visual, get_current_stage_progress, get_localized_action, initialize_agent_state, reset_job_dependent_state, resolve_agent_message, transition_agent_state
 from src.chat_routing import find_role_fragment, find_typed_assessment_option, is_roadmap_ui_request
 from src.safety import boundary_response
 
@@ -22,7 +23,7 @@ def inject_styles() -> None:
     st.markdown("""
     <style>
       .stApp { background: #f6f8fc; }
-      .block-container { max-width: 920px; padding-top: 2rem; padding-bottom: 6rem; }
+      .block-container { max-width: 1320px; padding-top: 2rem; padding-bottom: 6rem; }
       [data-testid="stSidebar"] { background: linear-gradient(180deg, #112b46, #193d5e); }
       [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3,
       [data-testid="stSidebar"] label, [data-testid="stSidebar"] .stCaption,
@@ -73,9 +74,27 @@ def inject_styles() -> None:
       .readiness-card a { color:#0e7490 !important; font-weight:700; }
       .readiness-card__formula { color:#466176; font-size:.9rem; }
       .readiness-card__gate { background:#fff7ed; border-radius:8px; padding:.5rem .65rem; }
+      .tap-companion-title { margin:.15rem 0 .25rem; color:#123b5b; font-size:1.2rem; font-weight:800; }
+      .tap-companion-role { color:#0e7490; font-size:.82rem; font-weight:700; margin-bottom:.65rem; }
+      .tap-companion-stage { display:inline-block; background:#e0f2fe; color:#075985; border-radius:999px; padding:.2rem .55rem; font-size:.76rem; font-weight:750; }
+      .tap-companion-bubble { background:#f4f8fa; color:#162c42; border:1px solid #d9e4ee; border-radius:14px 14px 14px 4px; padding:.75rem .8rem; margin:.7rem 0; line-height:1.55; }
+      .tap-journey { margin:.75rem 0; }
+      .tap-journey-step { display:flex; align-items:center; gap:.5rem; position:relative; padding:.22rem 0; color:#64748b; }
+      .tap-journey-step::before { content:""; width:3px; height:100%; background:#d9e4ea; position:absolute; inset-inline-start:.7rem; top:1.15rem; transition:background-color 600ms ease; }
+      .tap-journey-step:last-child::before { display:none; }
+      .tap-journey-dot { width:1.45rem; height:1.45rem; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:1; background:#d9e4ea; font-size:.72rem; }
+      .tap-journey-label { font-size:.78rem; font-weight:650; }
+      .tap-journey-step--completed .tap-journey-dot { background:#16a3a8; color:white; }
+      .tap-journey-step--completed .tap-journey-label { color:#0f766e; }
+      .tap-journey-step--active .tap-journey-dot { background:#0b5e8e; color:white; box-shadow:0 0 0 4px #dbeafe; transform:scale(1.05); }
+      .tap-journey-step--active .tap-journey-label { color:#0b5e8e; font-weight:800; }
+      .tap-journey-step--completed::before { background:#16a3a8; }
+      .tap-action-hint { border:1px dashed #7aa8be; border-radius:10px; padding:.5rem .6rem; color:#29455c; text-align:center; font-size:.82rem; font-weight:700; }
+      .tap-selected { background:#ecfeff; border:1px solid #67e8f9; border-radius:10px; padding:.4rem .55rem; color:#155e75; font-size:.8rem; font-weight:700; }
       [data-testid="stChatInput"] { border-radius:16px; border:1px solid #b9c9d8; box-shadow:0 7px 22px rgba(28,57,86,.10); }
       .stButton > button { border-radius:10px; border:1px solid #7aa8be; font-weight:600; }
-      @media (max-width:640px) { .block-container { padding:1rem .8rem 5rem; } .tap-hero { padding:1.2rem; border-radius:16px; } .tap-hero h1 { font-size:1.55rem; } }
+      @media (prefers-reduced-motion:reduce) { .tap-journey-step::before, .tap-journey-dot { transition:none !important; animation:none !important; } }
+      @media (max-width:760px) { .block-container { padding:1rem .8rem 5rem; } .tap-hero { padding:1.2rem; border-radius:16px; } .tap-hero h1 { font-size:1.55rem; } [data-testid="stHorizontalBlock"] { flex-direction:column-reverse; } }
     </style>
     """, unsafe_allow_html=True)
 @st.cache_resource
@@ -112,6 +131,12 @@ def readiness_rules(file_mtime_ns: int) -> dict[str, Any]:
     """Load the validated static readiness rules once per file version."""
     del file_mtime_ns
     return load_readiness_rules(READINESS_RULES_PATH)
+
+@st.cache_resource(show_spinner=False)
+def agent_flow(file_mtime_ns: int) -> dict[str, Any]:
+    """Load the validated, read-only TAP Companion flow once per file version."""
+    del file_mtime_ns
+    return load_agent_flow(AGENT_FLOW_PATH)
 
 def init_state() -> None:
     if "initialized" not in st.session_state:
@@ -229,6 +254,14 @@ def roadmap_anchor_id(job_id: str, skill_name: str) -> str:
 def assessment_anchor_id(job_id: str, widget_scope: str) -> str:
     return f"assessment-{safe_key_part(widget_scope)}-{safe_key_part(job_id)}"
 
+def clear_job_widget_state(job_id: str) -> None:
+    """Remove only downstream Streamlit values scoped to one previously selected job."""
+    token = f"__{job_id}__"
+    prefixes = ("assessment__", "assessment_answers__", "assessment_result__", "readiness_result__")
+    for key in list(st.session_state):
+        if isinstance(key, str) and key.startswith(prefixes) and (token in key or key.endswith(f"__{job_id}")):
+            del st.session_state[key]
+
 def roadmap_html(roadmap: dict[str, Any], language: str, anchor_id: str = "") -> str:
     """Render one escaped bilingual recommendation without automatic actions."""
     arabic = language in {"ar", "mixed"}
@@ -318,9 +351,13 @@ def render_skill_assessments(
     catalog: dict[str, Any],
     roadmap_available: bool,
     widget_scope: str,
+    flow: dict[str, Any] | None = None,
 ) -> None:
     missing = result.get("missing_required_skills", result.get("missing_skills", []))
     selected = select_assessment_skills(missing, catalog)
+    agent = st.session_state.get("tap_agent")
+    if flow and isinstance(agent, dict) and agent.get("selected_job_id") == str(result["job"]["id"]):
+        selected = selected[:1]
     if not selected:
         return
     arabic = language in {"ar", "mixed"}
@@ -330,7 +367,8 @@ def render_skill_assessments(
     submit_label = "أرسل الإجابات" if arabic else "Submit answers"
     note = "هذا تقييم أولي للديمو، وليس شهادة مهنية." if arabic else "This is a preliminary demo assessment, not a professional certification."
     st.markdown(f'<span id="{html.escape(assessment_anchor_id(job_id, widget_scope), quote=True)}"></span>', unsafe_allow_html=True)
-    with st.expander(expander_label):
+    assessment_open = st.session_state.get("tap_agent_open_assessment") == job_id
+    with st.expander(expander_label, expanded=assessment_open):
         st.caption(note)
         for item in selected:
             skill_name, assessment = item["skill"], item["assessment"]
@@ -364,6 +402,25 @@ def render_skill_assessments(
                     catalog["assessment_rules"]["passing_score_percentage"],
                     catalog["assessment_rules"]["questions_per_skill"],
                 )
+                agent = st.session_state.get("tap_agent")
+                if flow and isinstance(agent, dict) and agent.get("selected_job_id") == job_id:
+                    stored = st.session_state[result_key]
+                    by_job = dict(agent.get("assessment_results_by_job", {}))
+                    job_results = dict(by_job.get(job_id, {}))
+                    job_results[skill_name] = stored
+                    by_job[job_id] = job_results
+                    agent["assessment_results_by_job"] = by_job
+                    agent["latest_assessment"] = stored
+                    if agent.get("current_state") != "assessment_pending":
+                        agent["current_state"] = "assessment_pending"
+                        agent["current_stage"] = "verify"
+                    st.session_state.tap_agent = transition_agent_state(
+                        agent,
+                        "assessment_submitted",
+                        {"assessment_passed": bool(stored.get("passed"))},
+                        flow,
+                    )
+                    st.rerun()
             stored_result = st.session_state.get(result_key)
             if stored_result:
                 anchor = roadmap_anchor_id(job_id, skill_name) if roadmap_available else ""
@@ -483,11 +540,30 @@ def render_job_cards(
     assessments: dict[str, Any] | None = None,
     readiness: dict[str, Any] | None = None,
     widget_scope: str = "current",
+    flow: dict[str, Any] | None = None,
 ) -> None:
     """Render structured cards; result data keeps the language-neutral match level."""
     for result_index, result in enumerate(results):
         st.markdown(job_card_html(result, language), unsafe_allow_html=True)
-        if catalog:
+        job_id = str(result["job"]["id"])
+        agent = st.session_state.get("tap_agent")
+        selected = isinstance(agent, dict) and agent.get("selected_job_id") == job_id
+        select_label = "✓ الوظيفة المختارة" if selected and language in {"ar", "mixed"} else (
+            "✓ Selected opportunity" if selected else ("اختر هذه الفرصة" if language in {"ar", "mixed"} else "Select this opportunity")
+        )
+        if selected:
+            st.markdown(f'<div class="tap-selected">{html.escape(select_label)}</div>', unsafe_allow_html=True)
+        elif flow and st.button(select_label, key=f"select_job__{widget_scope}__{result_index}__{safe_key_part(job_id, '_')}", use_container_width=True):
+            previous_job_id = st.session_state.tap_agent.get("selected_job_id")
+            if previous_job_id and previous_job_id != job_id:
+                clear_job_widget_state(str(previous_job_id))
+            updated = reset_job_dependent_state(st.session_state.tap_agent, job_id, result)
+            updated["selected_widget_scope"] = f"{widget_scope}_{result_index}"
+            updated = transition_agent_state(updated, "job_selected_or_changed", {"selected_job_id_is_valid": True}, flow)
+            st.session_state.tap_agent = updated
+            st.rerun()
+        show_downstream = flow is None or selected
+        if catalog and show_downstream:
             roadmaps = build_skill_roadmaps(
                 result.get("missing_required_skills", result.get("missing_skills", [])),
                 catalog,
@@ -495,14 +571,15 @@ def render_job_cards(
             )
             if roadmaps:
                 label = "خطة قصيرة لسد فجوة المهارات" if language in {"ar", "mixed"} else "Mini Skill-Gap Roadmap"
-                with st.expander(label):
+                roadmap_open = selected and st.session_state.get("tap_agent_open_roadmap") == job_id
+                with st.expander(label, expanded=roadmap_open):
                     for roadmap in roadmaps:
                         anchor = roadmap_anchor_id(str(result["job"]["id"]), roadmap["requested_skill"])
                         st.markdown(roadmap_html(roadmap, language, anchor), unsafe_allow_html=True)
         card_scope = f"{widget_scope}_{result_index}"
-        if assessments:
-            render_skill_assessments(result, language, assessments, catalog is not None, card_scope)
-        if assessments and readiness:
+        if assessments and show_downstream:
+            render_skill_assessments(result, language, assessments, catalog is not None, card_scope, flow)
+        if assessments and readiness and show_downstream:
             render_final_readiness(result, language, assessments, readiness, card_scope)
 
 def fast_clarification(message: str, profile: dict[str, str]) -> str:
@@ -513,12 +590,182 @@ def fast_clarification(message: str, profile: dict[str, str]) -> str:
         return f"أقدر أساعدك في CV وLinkedIn والوظائف والمقابلات والعمل عن بُعد.{known}\n\nلإجابة أدق، اكتب: الدور المستهدف | مستوى الخبرة | المشكلة المحددة."
     return "I can help with CVs, LinkedIn, job search, interviews, and remote work. Send: target role | experience level | specific problem."
 
+def _agent_selected_result(agent: dict[str, Any]) -> dict[str, Any] | None:
+    selected = agent.get("selected_job_match")
+    return selected if isinstance(selected, dict) and isinstance(selected.get("job"), dict) else None
+
+def _valid_job_url(result: dict[str, Any] | None) -> bool:
+    url = result.get("job", {}).get("apply_url", "") if result else ""
+    return isinstance(url, str) and url.startswith(("https://", "http://"))
+
+def handle_companion_action(
+    action_id: str,
+    flow: dict[str, Any],
+    catalog: dict[str, Any] | None,
+    assessments: dict[str, Any] | None,
+    readiness_rules_data: dict[str, Any] | None,
+) -> None:
+    """Connect Companion actions to existing deterministic project helpers."""
+    agent = dict(st.session_state.tap_agent)
+    selected = _agent_selected_result(agent)
+    job_id = str(agent.get("selected_job_id") or "")
+    if action_id == "analyze_skill_gap" and selected:
+        missing = list(selected.get("missing_required_skills", selected.get("missing_skills", [])))
+        agent["skill_gap"] = {
+            "matched_required_skills": list(selected.get("matched_required_skills", [])),
+            "missing_required_skills": missing,
+            "missing_nice_to_have_skills": list(selected.get("missing_nice_to_have_skills", [])),
+        }
+        agent = transition_agent_state(agent, "skill_gap_calculated", {"missing_required_skills_count": len(missing)}, flow)
+    elif action_id in {"open_roadmap", "review_current_roadmap"} and selected and catalog:
+        roadmaps = build_skill_roadmaps(
+            selected.get("missing_required_skills", selected.get("missing_skills", [])),
+            catalog,
+            selected.get("missing_nice_to_have_skills", []),
+        )
+        agent["selected_roadmaps"] = roadmaps
+        st.session_state.tap_agent_open_roadmap = job_id
+        agent = transition_agent_state(agent, "roadmap_opened", {"roadmap_available": bool(roadmaps)}, flow)
+    elif action_id == "start_assessment" and selected and assessments:
+        priority = None
+        if agent.get("selected_roadmaps"):
+            priority = agent["selected_roadmaps"][0].get("requested_skill")
+        if not priority:
+            priority = (selected.get("missing_required_skills") or [None])[0]
+        available = bool(priority and find_skill_assessment(str(priority), assessments))
+        if available:
+            st.session_state.tap_agent_open_assessment = job_id
+            agent = transition_agent_state(agent, "assessment_started", {"assessment_available": True}, flow)
+        else:
+            suffix = "ar" if st.session_state.get("agent_language") in {"ar", "mixed"} else "en"
+            st.session_state.tap_agent_notice = assessments.get("fallback", {}).get(suffix, "No assessment is available for this skill.")
+    elif action_id == "calculate_readiness" and selected and readiness_rules_data:
+        completed = list(agent.get("assessment_results_by_job", {}).get(job_id, {}).values())
+        calculated = calculate_readiness(
+            selected.get("score"),
+            list(selected.get("missing_required_skills", selected.get("missing_skills", []))),
+            list(selected.get("matched_required_skills", [])),
+            completed,
+            readiness_rules_data,
+        )
+        by_job = dict(agent.get("readiness_result_by_job", {}))
+        by_job[job_id] = calculated
+        agent["readiness_result_by_job"] = by_job
+        agent = transition_agent_state(agent, "readiness_calculated", {"readiness_result_is_valid": calculated.get("state") == "calculated"}, flow)
+    elif action_id == "follow_readiness_action" and selected:
+        result = agent.get("readiness_result_by_job", {}).get(job_id, {})
+        agent = transition_agent_state(
+            agent,
+            "readiness_action_requested",
+            {"readiness_status_id": result.get("status_id"), "selected_job_url_is_valid": _valid_job_url(selected)},
+            flow,
+        )
+        if agent.get("current_state") == "gap_analyzed":
+            st.session_state.tap_agent_open_roadmap = job_id
+    elif action_id == "retry_data_load":
+        st.cache_resource.clear()
+    st.session_state.tap_agent = agent
+
+def journey_track_html(agent: dict[str, Any], flow: dict[str, Any], language: str) -> str:
+    arabic = language in {"ar", "mixed"}
+    suffix = "ar" if arabic else "en"
+    steps = []
+    for stage in get_current_stage_progress(agent, flow):
+        status_text = {"completed": "مكتملة" if arabic else "Completed", "active": "الحالية" if arabic else "Current", "pending": "قادمة" if arabic else "Upcoming"}[stage["status"]]
+        label = stage[f"label_{suffix}"]
+        steps.append(
+            f'<div class="tap-journey-step tap-journey-step--{stage["status"]}">'
+            f'<span class="tap-journey-dot" aria-hidden="true">{html.escape(stage["icon"])}</span>'
+            f'<span class="tap-journey-label">{html.escape(label)} · {html.escape(status_text)}</span></div>'
+        )
+    return f'<div class="tap-journey" dir="{"rtl" if arabic else "ltr"}">{"".join(steps)}</div>'
+
+def render_companion(
+    flow: dict[str, Any],
+    catalog: dict[str, Any] | None,
+    assessments: dict[str, Any] | None,
+    readiness_rules_data: dict[str, Any] | None,
+) -> None:
+    agent = st.session_state.tap_agent
+    language = st.session_state.get("agent_language", "en")
+    arabic = language in {"ar", "mixed"}
+    suffix = "ar" if arabic else "en"
+    selected = _agent_selected_result(agent)
+    job_id = str(agent.get("selected_job_id") or "")
+    readiness_result = agent.get("readiness_result_by_job", {}).get(job_id)
+    context = build_agent_context(
+        st.session_state.get("demo_profile"),
+        agent.get("current_job_results"),
+        selected,
+        agent.get("selected_roadmaps"),
+        agent.get("latest_assessment"),
+        readiness_result,
+        readiness_rules_data,
+        language,
+    )
+    message = resolve_agent_message(agent["current_state"], context, flow, language)
+    signature = build_message_signature(agent["current_state"], agent.get("selected_job_id"), message, context)
+    if agent.get("last_agent_message_signature") != signature:
+        agent = dict(agent)
+        agent["last_agent_message_signature"] = signature
+        st.session_state.tap_agent = agent
+    state_definition = next(item for item in flow["states"] if item["id"] == agent["current_state"])
+    stage = flow["journey"]["stages"][agent["current_stage"]]
+    visual = get_companion_visual(COMPANION_ASSET_PATH, flow, language)
+    with st.container(border=True):
+        if visual["kind"] == "image":
+            st.image(visual["value"], width=150)
+        else:
+            st.markdown(f"## {html.escape(visual['value'])}")
+            st.caption(visual["label"])
+        role = flow["agent"][f"role_{suffix}"]
+        stage_label = stage[f"label_{suffix}"]
+        badge = flow["ui"]["visual_state_badges"].get(state_definition["visual_state"], "🧭")
+        st.markdown(
+            f'<div dir="{"rtl" if arabic else "ltr"}"><div class="tap-companion-title">TAP Companion</div>'
+            f'<div class="tap-companion-role">{html.escape(role)}</div>'
+            f'<span class="tap-companion-stage">{html.escape(badge)} {html.escape(stage_label)}</span>'
+            f'<div class="tap-companion-bubble">{message}</div></div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(journey_track_html(agent, flow, language), unsafe_allow_html=True)
+        notice = st.session_state.pop("tap_agent_notice", None)
+        if notice:
+            st.info(notice)
+        action = get_localized_action(agent["current_state"], flow, language)
+        interrupted = st.session_state.get("tap_agent_interrupted", False)
+        if interrupted and agent["current_state"] not in {"profile_loaded", "clarification_needed", "data_unavailable"}:
+            continue_action = flow["actions"]["continue_journey"][f"label_{suffix}"]
+            if st.button(continue_action, key="tap_agent_continue", use_container_width=True):
+                st.session_state.tap_agent_interrupted = False
+                st.rerun()
+            return
+        if not action:
+            return
+        represented_elsewhere = action["id"] in {"focus_chat_input", "select_job", "submit_assessment"}
+        if represented_elsewhere:
+            st.markdown(f'<div class="tap-action-hint">{html.escape(action["label"])}</div>', unsafe_allow_html=True)
+        elif action["id"] == "view_job_link" and selected and _valid_job_url(selected):
+            st.link_button(action["label"], selected["job"]["apply_url"], use_container_width=True)
+        elif st.button(action["label"], key=f'tap_agent_action__{action["id"]}__{safe_key_part(job_id, "_")}', use_container_width=True):
+            handle_companion_action(action["id"], flow, catalog, assessments, readiness_rules_data)
+            st.rerun()
+
 def main() -> None:
     init_state()
     inject_styles()
     try: kb, retriever = services()
     except Exception as exc:
         st.error(f"Knowledge base could not start: {exc}"); st.stop()
+    try:
+        flow_data = agent_flow(AGENT_FLOW_PATH.stat().st_mtime_ns)
+        flow_error = ""
+        if "tap_agent" not in st.session_state:
+            st.session_state.tap_agent = initialize_agent_state(flow_data)
+        if "agent_language" not in st.session_state:
+            st.session_state.agent_language = "en"
+    except (OSError, ValueError) as exc:
+        flow_data, flow_error = None, f"TAP Companion is temporarily unavailable: {exc}"
     try:
         catalog = learning_catalog(LEARNING_RESOURCES_PATH.stat().st_mtime_ns)
         catalog_error = ""
@@ -534,6 +781,13 @@ def main() -> None:
         readiness_error = ""
     except (OSError, ValueError):
         readiness, readiness_error = None, "Final readiness is temporarily unavailable. Job search still works normally."
+    if flow_data and (catalog_error or assessment_error or readiness_error or st.session_state.demo_profile_error):
+        st.session_state.tap_agent = transition_agent_state(
+            st.session_state.tap_agent,
+            "required_runtime_data_failed",
+            {"validated_loader_error_exists": True},
+            flow_data,
+        )
     st.markdown("""
     <section class="tap-hero">
       <h1>💼 TAP Career Companion</h1>
@@ -561,34 +815,82 @@ def main() -> None:
             st.caption(assessment_error)
         if readiness_error:
             st.caption(readiness_error)
+        if flow_error:
+            st.caption(flow_error)
         st.session_state.remember = st.toggle("Remember me on this device", value=st.session_state.remember)
         st.divider()
-        if st.button("New Chat", use_container_width=True): st.session_state.history = []; save(); st.rerun()
+        if st.button("New Chat", use_container_width=True):
+            st.session_state.history = []
+            if flow_data:
+                st.session_state.tap_agent = initialize_agent_state(flow_data)
+                st.session_state.tap_agent_interrupted = False
+            save(); st.rerun()
         if st.button("Delete Saved Data", use_container_width=True):
-            delete_saved_data(MEMORY_PATH); st.session_state.profile = empty_profile(); st.session_state.history = []; st.success("Saved local profile and conversation deleted.")
-    for message_index, message in enumerate(st.session_state.history):
-        render_message(message["role"], message["content"])
-        if message.get("jobs"):
-            render_job_cards(message["jobs"], message.get("job_language", "en"), catalog, assessments, readiness, f"history_{message_index}")
-    user_message = st.chat_input("Ask about your career… | اسأل عن مسارك المهني…")
+            delete_saved_data(MEMORY_PATH); st.session_state.profile = empty_profile(); st.session_state.history = []
+            if flow_data:
+                st.session_state.tap_agent = initialize_agent_state(flow_data)
+            st.success("Saved local profile and conversation deleted.")
+    chat_col, companion_col = st.columns([0.68, 0.32], gap="large")
+    with companion_col:
+        if flow_data:
+            render_companion(flow_data, catalog, assessments, readiness)
+        else:
+            st.info(flow_error)
+    with chat_col:
+        for message_index, message in enumerate(st.session_state.history):
+            render_message(message["role"], message["content"])
+            if message.get("jobs"):
+                render_job_cards(message["jobs"], message.get("job_language", "en"), catalog, assessments, readiness, f"history_{message_index}", flow_data)
+            if message.get("source_refs"):
+                with st.expander("Source"):
+                    st.write("\n".join(message["source_refs"]))
+        user_message = st.chat_input("Ask about your career… | اسأل عن مسارك المهني…")
     if not user_message: return
-    st.session_state.history.append({"role":"user", "content":user_message}); render_message("user", user_message)
+    st.session_state.history.append({"role":"user", "content":user_message})
     language = detect_language(user_message)
+    st.session_state.agent_language = language
     if is_job_search_intent(user_message):
+        if flow_data:
+            agent = st.session_state.tap_agent
+            if agent.get("current_state") not in {"profile_loaded", "clarification_needed"}:
+                old_job_id = agent.get("selected_job_id")
+                if old_job_id:
+                    clear_job_widget_state(str(old_job_id))
+                    agent = reset_job_dependent_state(agent, "__new_search__", None)
+                    agent["selected_job_id"] = None
+                agent["current_state"] = flow_data["session_state"]["initial_state"]
+                agent["current_stage"] = "profile"
+                st.session_state.tap_agent = agent
+            st.session_state.tap_agent = transition_agent_state(
+                st.session_state.tap_agent,
+                "job_search_intent_detected",
+                {"normalized_job_query": user_message.strip()},
+                flow_data,
+            )
         try:
             matches = job_index(JOBS_PATH.stat().st_mtime_ns).search(user_message, st.session_state.demo_profile)
         except (OSError, ValueError) as exc:
             answer = f"تعذر فتح فرص العمل المحلية: {exc}" if language in {"ar", "mixed"} else f"Could not load local jobs: {exc}"
-            st.session_state.history.append({"role":"assistant", "content":answer}); render_message("assistant", answer); save(); return
+            if flow_data:
+                st.session_state.tap_agent = transition_agent_state(st.session_state.tap_agent, "required_runtime_data_failed", {"validated_loader_error_exists": True}, flow_data)
+            st.session_state.history.append({"role":"assistant", "content":answer}); save(); st.rerun()
         if matches:
             answer = "لقيتلك فرص قريبة من طلبك:" if language in {"ar", "mixed"} else "I found opportunities matching your request:"
             event = {"role":"assistant", "content":answer, "jobs":matches, "job_language":language}
             st.session_state.history.append(event)
-            render_message("assistant", answer)
-            render_job_cards(matches, language, catalog, assessments, readiness, f"history_{len(st.session_state.history) - 1}")
-            save(); return
+            if flow_data:
+                agent = dict(st.session_state.tap_agent)
+                agent["current_job_results"] = matches
+                agent["selected_job_id"] = None
+                agent["selected_job_match"] = None
+                st.session_state.tap_agent = transition_agent_state(agent, "job_search_completed", {"job_results_count": len(matches)}, flow_data)
+            save(); st.rerun()
         answer = "ما لقيت تطابقًا كافيًا. جرّب إزالة الموقع، اختيار Remote، أو استخدام مسمى أوسع." if language in {"ar", "mixed"} else "No close match found. Try removing the location, choosing Remote, or using a broader role title."
-        st.session_state.history.append({"role":"assistant", "content":answer}); render_message("assistant", answer); save(); return
+        if flow_data:
+            agent = dict(st.session_state.tap_agent)
+            agent["current_job_results"] = []
+            st.session_state.tap_agent = transition_agent_state(agent, "job_search_completed", {"job_results_count": 0}, flow_data)
+        st.session_state.history.append({"role":"assistant", "content":answer}); save(); st.rerun()
     if is_underspecified_job_request(user_message):
         answer = (
             "شو الدور المستهدف ومستوى خبرتك؟ مثال: Junior Backend Developer | مبتدئ."
@@ -596,7 +898,10 @@ def main() -> None:
             else "What target role and experience level should I use? Example: Junior Backend Developer | entry level."
         )
         st.session_state.history.append({"role":"assistant", "content":answer})
-        render_message("assistant", answer); save(); return
+        if flow_data and st.session_state.tap_agent.get("current_state") in {"profile_loaded", "clarification_needed"}:
+            agent = transition_agent_state(st.session_state.tap_agent, "job_search_intent_detected", {"normalized_job_query": user_message.strip()}, flow_data)
+            st.session_state.tap_agent = transition_agent_state(agent, "job_search_completed", {"job_results_count": 0}, flow_data)
+        save(); st.rerun()
     typed_option = find_typed_assessment_option(user_message, assessments) if assessments else None
     if typed_option:
         answer = (
@@ -605,7 +910,7 @@ def main() -> None:
             else f"This looks like an answer from the {typed_option['skill']} assessment. To record your score, open the job card, choose it inside “Test My Skills,” and submit the form. Assessment answers are not graded in chat before submission."
         )
         st.session_state.history.append({"role":"assistant", "content":answer})
-        render_message("assistant", answer); save(); return
+        save(); st.rerun()
     if is_roadmap_ui_request(user_message):
         answer = (
             "لفتح الخطة: ابحث أولًا عن وظيفة محددة، ثم افتح «خطة قصيرة لسد فجوة المهارات» تحت بطاقة الوظيفة. الخطة تُبنى من المهارات المطلوبة الناقصة لتلك الوظيفة، لذلك لا تظهر كإجابة عامة منفصلة."
@@ -613,7 +918,7 @@ def main() -> None:
             else "To open the roadmap, search for a specific job first, then expand “Mini Skill-Gap Roadmap” beneath its card. The roadmap is built from that job’s missing required skills."
         )
         st.session_state.history.append({"role":"assistant", "content":answer})
-        render_message("assistant", answer); save(); return
+        save(); st.rerun()
     try:
         indexed_jobs = [item.job for item in job_index(JOBS_PATH.stat().st_mtime_ns).index]
         role_fragment = find_role_fragment(user_message, indexed_jobs)
@@ -627,7 +932,7 @@ def main() -> None:
             else f"Got it — the closest role in the demo data is {role_name}. Choose one request: “show matching jobs,” “what skills are required?”, or “how should I tailor my CV for this role?”"
         )
         st.session_state.history.append({"role":"assistant", "content":answer})
-        render_message("assistant", answer); save(); return
+        save(); st.rerun()
     special = boundary_response(user_message)
     retrieved = retriever.search(user_message, threshold=FAST_MATCH_THRESHOLD)
     if special: answer = special
@@ -636,10 +941,20 @@ def main() -> None:
         answer = instant_answer(retrieved[0], language, st.session_state.profile, user_message)
     else:
         answer = fast_clarification(user_message, st.session_state.profile)
-    render_message("assistant", answer)
-    st.session_state.history.append({"role":"assistant", "content":answer}); save()
+    event = {"role":"assistant", "content":answer}
     if any(r["item"]["category"].startswith("tap") or r["item"]["intent"].startswith("tap_") for r in retrieved):
         refs = [ref for r in retrieved for ref in r["item"].get("source_refs", [])]
         if refs:
-            with st.expander("Source"): st.write("\n".join(refs))
+            event["source_refs"] = refs
+    st.session_state.history.append(event)
+    if flow_data and retrieved:
+        st.session_state.tap_agent = transition_agent_state(
+            st.session_state.tap_agent,
+            "general_career_question_answered",
+            {"fast_matcher_answer_was_returned": True},
+            flow_data,
+        )
+        if st.session_state.tap_agent.get("current_state") not in {"profile_loaded", "clarification_needed", "data_unavailable"}:
+            st.session_state.tap_agent_interrupted = True
+    save(); st.rerun()
 if __name__ == "__main__": main()
